@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="9q0q76hc">
+  <resources>
+    <component id="i0ha0" name="LoginPanel.xml" path="/Panel/" exported="true"/>
+    <component id="i0ha1" name="LoginButton.xml" path="/Component/" exported="true"/>
+    <component id="i0ha2" name="SelectServerPanel.xml" path="/Panel/" exported="true"/>
+    <component id="nubc3" name="ServerInfoButton.xml" path="/Component/" exported="true"/>
+  </resources>
+  <publish name=""/>
+</packageDescription>
