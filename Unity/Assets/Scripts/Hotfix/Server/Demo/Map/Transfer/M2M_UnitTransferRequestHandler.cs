@@ -9,7 +9,7 @@ namespace ET.Server
         protected override async ETTask Run(Scene scene, M2M_UnitTransferRequest request, M2M_UnitTransferResponse response)
         {
             UnitComponent unitComponent = scene.GetComponent<UnitComponent>();
-            //反序列话，unit实体，并添加到unitComponent中管理
+            //反序列化，unit实体，并添加到unitComponent中管理
             Unit unit = MongoHelper.Deserialize<Unit>(request.Unit);
 
             unitComponent.AddChild(unit);
