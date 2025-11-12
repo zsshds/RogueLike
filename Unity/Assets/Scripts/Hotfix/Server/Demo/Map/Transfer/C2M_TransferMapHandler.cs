@@ -5,6 +5,7 @@ namespace ET.Server
 	[MessageLocationHandler(SceneType.Map)]
 	public class C2M_TransferMapHandler : MessageLocationHandler<Unit, C2M_TransferMap, M2C_TransferMap>
 	{
+		//ToDo:这条消息要改，需要客户端传toMap
 		protected override async ETTask Run(Unit unit, C2M_TransferMap request, M2C_TransferMap response)
 		{
 			await ETTask.CompletedTask;
@@ -19,7 +20,7 @@ namespace ET.Server
 			{
 				toMap = "Map1";
 			}
-
+			
 			StartSceneConfig startSceneConfig = StartSceneConfigCategory.Instance.GetBySceneName(unit.Fiber().Zone, toMap);
 			
 			TransferHelper.TransferAtFrameFinish(unit, startSceneConfig.ActorId, toMap).Coroutine();
