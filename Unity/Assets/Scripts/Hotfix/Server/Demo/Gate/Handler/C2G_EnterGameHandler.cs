@@ -76,7 +76,9 @@ namespace ET.Server
                         //这里可以从DB中加载Unit
                         Unit unit = UnitFactory.Create(scene, player.Id, UnitType.Player);
                         long unitId = unit.Id;
-                        StartSceneConfig startSceneConfig = StartSceneConfigCategory.Instance.GetBySceneName(session.Zone(), "Map1");
+                        //获取对应mapConfig
+                        string sceneName = StartSceneConfigCategory.Instance.GetMapSceneConfigByZone(session.Zone()).Name;
+                        StartSceneConfig startSceneConfig = StartSceneConfigCategory.Instance.GetBySceneName(session.Zone(), sceneName);
                         //等待一帧后再传送
                         TransferHelper.TransferAtFrameFinish(unit, startSceneConfig.ActorId, startSceneConfig.Name).Coroutine();
                         player.UnitId = unitId;
