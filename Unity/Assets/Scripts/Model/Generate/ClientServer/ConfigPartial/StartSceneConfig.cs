@@ -36,6 +36,20 @@ namespace ET
             return this.ClientScenesByName[zone][name];
         }
 
+        public StartSceneConfig GetMapSceneConfigByZone(int zone)
+        {
+            //一个zone只会对应一个map服务器
+            Dictionary<string, StartSceneConfig> configDic = this.ClientScenesByName[zone];
+            foreach (StartSceneConfig startSceneConfig in configDic.Values)
+            {
+                if (startSceneConfig.Type == SceneType.Map)
+                {
+                    return startSceneConfig;
+                }
+            }
+            return null;
+        }
+
         public override void EndInit()
         {
             foreach (StartSceneConfig startSceneConfig in this.GetAll().Values)
