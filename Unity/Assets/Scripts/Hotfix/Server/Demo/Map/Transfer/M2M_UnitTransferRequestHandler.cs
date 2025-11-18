@@ -23,7 +23,8 @@ namespace ET.Server
 
             unit.AddComponent<MoveComponent>();
             unit.AddComponent<PathfindingComponent, string>(scene.Name);
-            unit.Position = new float3(-10, 0, -10);
+            //有时候真的搞不太懂，为什么在UnitFactory中已经设置好位置了，还要在这里在设置一次，这不是有病吗？
+            //unit.Position = new float3(-10, 0, -10);
 
             unit.AddComponent<MailBoxComponent, MailBoxType>(MailBoxType.OrderedMessage);
 
