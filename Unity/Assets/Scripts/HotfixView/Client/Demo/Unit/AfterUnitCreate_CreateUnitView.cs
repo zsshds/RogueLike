@@ -8,7 +8,7 @@ namespace ET.Client
         protected override async ETTask Run(Scene scene, AfterUnitCreate args)
         {
             Unit unit = args.Unit;
-            // Unit View层
+            // Unit View层 同帧同步不同的是这个Unit已经是表现层的了
             string assetsName = $"Assets/Bundles/Unit/Unit.prefab";
             GameObject bundleGameObject = await scene.GetComponent<ResourcesLoaderComponent>().LoadAssetAsync<GameObject>(assetsName);
             GameObject prefab = bundleGameObject.Get<GameObject>("Skeleton");
@@ -18,6 +18,7 @@ namespace ET.Client
             go.transform.position = unit.Position;
             unit.AddComponent<GameObjectComponent>().GameObject = go;
             unit.AddComponent<AnimatorComponent>();
+            unit.AddComponent<PlayerCameraComponent>().TargetObject = go;
             //这里对于Unit的表现层实体已经加载完成，现在需要处理的是更改MainCamera视角对人物进行跟踪
             await ETTask.CompletedTask;
         }
