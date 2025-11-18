@@ -6,6 +6,7 @@ namespace ET.Client
     {
         public static Unit Create(Scene currentScene, UnitInfo unitInfo)
         {
+	        //UnitComponent 会添加一个Unit孩子，ID为Unitid（PlayerID）
 	        UnitComponent unitComponent = currentScene.GetComponent<UnitComponent>();
 	        Unit unit = unitComponent.AddChildWithId<Unit, int>(unitInfo.UnitId, unitInfo.ConfigId);
 	        unitComponent.Add(unit);
