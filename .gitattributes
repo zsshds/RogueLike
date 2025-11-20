@@ -49,6 +49,9 @@
 *.fbx filter=lfs diff=lfs merge=lfs -text
 *.glb filter=lfs diff=lfs merge=lfs -text
 *.stl filter=lfs diff=lfs merge=lfs -text
+*.FBX filter=lfs diff=lfs merge=lfs -text
+*.GLB filter=lfs diff=lfs merge=lfs -text
+*.STL filter=lfs diff=lfs merge=lfs -text
 3DProject/res/【西游记_齐天大圣】Q版孙悟空[[:space:]]3D打印[[:space:]]手办[[:space:]]模型_爱给网_aigei_com/大圣.fbx filter=lfs diff=lfs merge=lfs -text
 3DProject/res/【西游记_齐天大圣】Q版孙悟空[[:space:]]3D打印[[:space:]]手办[[:space:]]模型_爱给网_aigei_com/大圣.glb filter=lfs diff=lfs merge=lfs -text
 3DProject/res/【西游记_齐天大圣】Q版孙悟空[[:space:]]3D打印[[:space:]]手办[[:space:]]模型_爱给网_aigei_com/大圣.stl filter=lfs diff=lfs merge=lfs -text
