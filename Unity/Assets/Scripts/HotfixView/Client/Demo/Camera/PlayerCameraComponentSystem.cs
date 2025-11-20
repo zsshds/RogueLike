@@ -18,7 +18,7 @@ namespace ET.Client
             if (self.TargetObject != null)
             {
                 Vector3 pos = self.TargetObject.transform.position;
-                self.Transform.position = new Vector3(pos.x, 3, pos.z - 4f);
+                self.Transform.position = new Vector3(pos.x, 5, pos.z - 4f);
             }
         }
     }
