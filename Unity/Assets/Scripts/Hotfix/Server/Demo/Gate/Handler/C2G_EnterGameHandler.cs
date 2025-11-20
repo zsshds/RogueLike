@@ -1,4 +1,5 @@
 ﻿using System;
+using Unity.Mathematics;
 
 namespace ET.Server
 {
@@ -75,6 +76,7 @@ namespace ET.Server
                         Scene scene = gateMapComponent.Scene;
                         //这里可以从DB中加载Unit
                         Unit unit = UnitFactory.Create(scene, player.Id, UnitType.Player);
+                        unit.Position = new float3(0, 0.7f, 0);
                         long unitId = unit.Id;
                         //获取对应mapConfig
                         string sceneName = StartSceneConfigCategory.Instance.GetMapSceneConfigByZone(session.Zone()).Name;
