@@ -19,6 +19,7 @@ namespace ET.Client
             unit.AddComponent<GameObjectComponent>().GameObject = go;
             unit.AddComponent<AnimatorComponent>();
             unit.AddComponent<PlayerCameraComponent>().TargetObject = go;
+            unit.AddComponent<PlayerColliderComponent, GameObject>(go);
             //这里对于Unit的表现层实体已经加载完成，现在需要处理的是更改MainCamera视角对人物进行跟踪
             await ETTask.CompletedTask;
         }
