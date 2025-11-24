@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <packageDescription id="ngzx0fqy">
-  <resources/>
+  <resources>
+    <component id="jfdx0" name="MainPanel.xml" path="/Panel/" exported="true"/>
+    <image id="v5yn1" name="j_bg.png" path="/res/" exported="true"/>
+    <image id="v5yn2" name="j_btn.png" path="/res/" exported="true"/>
+    <component id="v5yn3" name="Joystick.xml" path="/Component/" exported="true"/>
+  </resources>
+  <publish name=""/>
 </packageDescription>
