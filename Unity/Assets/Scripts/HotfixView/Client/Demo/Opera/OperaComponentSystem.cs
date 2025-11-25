@@ -70,5 +70,14 @@ namespace ET.Client
             }
             Log.Debug($"Croutine 2 end2");
         }
+        
+        public static void StopMove(this OperaComponent self)
+        {
+            //这里由于使用到了摇杆的原因，需要帧同步，定义一个OP消息给后端
+            OperateInfo operateInfo = OperateInfo.Create();
+            operateInfo.OperateType = (int)EOperateType.Move;
+            operateInfo.InputType = (int)EInputType.KeyUp;
+            self.OperateInfos.Add(operateInfo);
+        }
     }
 }

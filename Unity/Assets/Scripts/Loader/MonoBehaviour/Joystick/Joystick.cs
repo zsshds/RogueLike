@@ -17,9 +17,9 @@ namespace ET
     { 
         //定义一些事件
         public class JoystickEvent : UnityEvent<Vector2> { }
-        public JoystickEvent OnPointerDown = new JoystickEvent(); // 事件： 摇杆被按下时
-        public JoystickEvent OnPointerUp = new JoystickEvent(); //事件 ： 摇杆上抬起时
-        public JoystickEvent OnJoystickMove = new JoystickEvent(); //事件 ： 摇杆被 拖拽时
+        public JoystickEvent OnJoystickTouchBegin = new JoystickEvent(); // 事件： 摇杆被按下时
+        public JoystickEvent OnJoystickTouchEnd = new JoystickEvent(); //事件 ： 摇杆上抬起时
+        public JoystickEvent OnJoystickTouchMove = new JoystickEvent(); //事件 ： 摇杆被 拖拽时
         public UnityEvent<Vector2> OnSwipeEvent = new UnityEvent<Vector2>(); //事件 ： 非触发摇杆滑动时
         private Vector3 originLocalPostion, pointerDownPosition;
         private int fingerId = int.MinValue; //当前触发摇杆的 pointerId ，预设一个永远无法企及的值
@@ -58,7 +58,7 @@ namespace ET
         private void Update()
         {
             if (this.IsDraging && this.dragTime > DRAG_TIME)
-                OnJoystickMove?.Invoke(JoystickTransform.localPosition / maxRadius); //fixedupdate 为物理更新，摇杆操作放在常规 update 就好
+                OnJoystickTouchMove?.Invoke(JoystickTransform.localPosition / maxRadius); //fixedupdate 为物理更新，摇杆操作放在常规 update 就好
         }
         
         private void OnDisable()
@@ -70,7 +70,7 @@ namespace ET
         private void RestJoystick()
         {
             if (this.IsDraging && this.dragTime > DRAG_TIME)
-                OnJoystickMove?.Invoke(Vector2.zero);
+                OnJoystickTouchMove?.Invoke(Vector2.zero);
             JoystickTransform.localPosition = originLocalPostion;
             fingerId = int.MinValue;
             this.dragTime = 0;
@@ -84,7 +84,7 @@ namespace ET
             if (inputEvent.touchId < -1 || IsDraging) return;  // 过滤无效输入
             fingerId = inputEvent.touchId;  // 记录手指ID
             pointerDownPosition = inputEvent.position;
-            OnPointerDown.Invoke(inputEvent.position);
+            OnJoystickTouchBegin.Invoke(inputEvent.position);
             pointDownTime = Time.realtimeSinceStartup;  // 记录按下时间
         }
         
@@ -121,7 +121,7 @@ namespace ET
                 }
             }
             RestJoystick();  // 重置摇杆
-            OnPointerUp.Invoke(inputEvent.position);
+            OnJoystickTouchEnd.Invoke(inputEvent.position);
         }
         #endregion
     }

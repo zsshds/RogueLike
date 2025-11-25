@@ -1,0 +1,8 @@
+message OperateInfo
+{
+    int32 OperateType = 1; //操作类型
+    int32 InputType = 2; //输入类型，按下/抬起
+	Unity.Mathematics.float3 Vec3 = 3; //v3参数
+	int64 Value1 = 4;
+	int64 Value2 = 5;
+}

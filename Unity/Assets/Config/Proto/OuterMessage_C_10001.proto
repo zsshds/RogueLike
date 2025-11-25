@@ -397,3 +397,4 @@ message G2C_EnterGame // ISessionResponse
 	string Message = 3;
 	int64 MyUnitId = 4;
 }
+
