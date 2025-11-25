@@ -5,6 +5,7 @@
     <image id="v5yn1" name="j_bg.png" path="/res/" exported="true"/>
     <image id="v5yn2" name="j_btn.png" path="/res/" exported="true"/>
     <component id="v5yn3" name="Joystick.xml" path="/Component/" exported="true"/>
+    <component id="rn9h4" name="JoystickComponent.xml" path="/Component/" exported="true"/>
   </resources>
   <publish name=""/>
 </packageDescription>

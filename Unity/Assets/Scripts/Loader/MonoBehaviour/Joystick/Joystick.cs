@@ -1,158 +1,128 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using FairyGUI;
-using DG.Tweening;
+using UnityEngine.Events;
+
 namespace ET
 {
-    public class Joystick : EventDispatcher
+    public enum Direction  // 方向枚举
+    {
+        Both,
+        Horizontal,
+        Vertical
+    }
+    
+    
+    public class Joystick : MonoBehaviour
     { 
-        //事件的监听者
-        public EventListener onMove { get; private set; }  //设置了一个安全权限
-        public EventListener onEnd { get; private set; }
-
-        //mainUI里的对象
-        private GButton Btn_Joystick;
-        private GObject joystick;
-        private GObject JoystickArea;
-        private GObject JoystickCenter;
-
-        //摇杆的属性
-        private float initX;
-        private float initY;
-        private float startStageX;
-        private float startStageY;
-        private float lastStageX;
-        private float lastStageY;
-        private int touchID;
-        private int radius { get; set; }
-        private GTweener tweener;
+        //定义一些事件
+        public class JoystickEvent : UnityEvent<Vector2> { }
+        public JoystickEvent OnPointerDown = new JoystickEvent(); // 事件： 摇杆被按下时
+        public JoystickEvent OnPointerUp = new JoystickEvent(); //事件 ： 摇杆上抬起时
+        public JoystickEvent OnJoystickMove = new JoystickEvent(); //事件 ： 摇杆被 拖拽时
+        public UnityEvent<Vector2> OnSwipeEvent = new UnityEvent<Vector2>(); //事件 ： 非触发摇杆滑动时
+        private Vector3 originLocalPostion, pointerDownPosition;
+        private int fingerId = int.MinValue; //当前触发摇杆的 pointerId ，预设一个永远无法企及的值
         
-        public Joystick(GButton Btn_Joystick, GObject joystick, GObject JoystickArea, GObject JoystickCenter)
+        //定义摇杆属性
+        private const float DRAG_TIME = 0.15f;  // 判断拖拽和滑动的阈值时间
+        public int offsetY = 0;  // Y轴偏移量
+        public int offsetX = 0;
+        public float maxRadius = 100;  // 摇杆移动的最大半径
+        public Direction activatedAxis = Direction.Both;  // 激活的轴向
+        public GButton joystick; //摇杆
+        public Transform JoystickTransform;
+        public Transform BackGroundTransform;
+        public bool IsDraging { get { return fingerId != int.MinValue; } } //摇杆拖拽状态
+        private float dragTime = 0;
+        private float pointDownTime = 0;
+
+        //初始化组组件，传递UIGO的Transforme
+        public void Init(GButton Btn_joystick, GObject Img_Bg)
         {
-            onMove = new EventListener(this,"onMove");
-            onEnd = new EventListener(this, "onEnd");
-            //rockingbarButton = mainUI.GetChild("RockingBar").asButton;
-            //rockingbarButton.changeStateOnClick = false;
-            this.Btn_Joystick = Btn_Joystick;
-            this.Btn_Joystick.changeStateOnClick = false;
-            //thumb = rockingbarButton.GetChild("thumb");
-            this.joystick = joystick;
-            //touchArea = mainUI.GetChild("RockingBarTouchArea");
-            this.JoystickArea = JoystickArea;
-            //center = mainUI.GetChild("RockingBarCenter");
-            this.JoystickCenter = JoystickCenter;
-
-            initX = this.JoystickCenter.x + this.JoystickCenter.width / 2;
-            initY = this.JoystickCenter.y + this.JoystickCenter.height / 2;
-            touchID = -1;
-            radius = 150;
-
-            this.JoystickArea.onTouchBegin.Add(OnTouchBegin);
-            this.JoystickArea.onTouchMove.Add(OnTouchMove);
-            this.JoystickArea.onTouchEnd.Add(OnTouchEnd);
+            this.BackGroundTransform = Img_Bg.displayObject.gameObject.transform;
+            //计算偏移量
+            this.offsetY = -(int)Math.Round(Img_Bg.height / 2 - Btn_joystick.height / 2);
+            this.offsetX = (int)Math.Round(Img_Bg.width / 2 - Btn_joystick.width / 2);
+            //获取摇杆的 FGUI 对象
+            this.joystick = Btn_joystick;
+            this.JoystickTransform = this.joystick.displayObject.gameObject.transform;
+            this.originLocalPostion = this.BackGroundTransform.localPosition + new Vector3(offsetX, offsetY, 0); 
+            this.RestJoystick();
+            //绑定FGUI触摸事件
+            this.joystick.onTouchBegin.Add(OnTouchBegin);
+            this.joystick.onTouchMove.Add(OnTouchMove);
+            this.joystick.onTouchEnd.Add(OnTouchEnd);
+        }
+        
+        private void Update()
+        {
+            if (this.IsDraging && this.dragTime > DRAG_TIME)
+                OnJoystickMove?.Invoke(JoystickTransform.localPosition / maxRadius); //fixedupdate 为物理更新，摇杆操作放在常规 update 就好
+        }
+        
+        private void OnDisable()
+        {
+            RestJoystick(); //意外被 Disable 各单位需要被重置
         }
 
-        //开始触摸
+        //重置摇杆位置
+        private void RestJoystick()
+        {
+            if (this.IsDraging && this.dragTime > DRAG_TIME)
+                OnJoystickMove?.Invoke(Vector2.zero);
+            JoystickTransform.localPosition = originLocalPostion;
+            fingerId = int.MinValue;
+            this.dragTime = 0;
+            this.pointDownTime = 0;
+        }
+        
+        #region 摇杆触摸事件
         private void OnTouchBegin(EventContext context)
         {
-            if (touchID == -1)  //第一次触摸
-            {
-                InputEvent inputEvent = (InputEvent)context.data;
-                touchID = inputEvent.touchId;
-
-                if (tweener != null)
-                {
-                    tweener.Kill();  //杀死上一个动画
-                    tweener = null;
-                }
-
-                Vector2 localPos = GRoot.inst.GlobalToLocal(new Vector2(inputEvent.x, inputEvent.y));
-                float posX = localPos.x;
-                float posY = localPos.y;
-                Btn_Joystick.selected = true;
-
-                lastStageX = posX;
-                lastStageY = posY;
-                startStageX = posX;
-                startStageY = posY;
-
-                JoystickCenter.visible = true;
-                JoystickCenter.SetXY(posX - JoystickCenter.width / 2, posY - JoystickCenter.height / 2);
-                Btn_Joystick.SetXY(posX - Btn_Joystick.width / 2, posY - Btn_Joystick.height / 2);
-
-                float deltaX = posX - initX;
-                float deltaY = posY - initY;
-                float degrees = Mathf.Atan2(deltaY, deltaX) * 180 / Mathf.PI;  //弧度转角度
-                joystick.rotation = degrees + 90;
-                context.CaptureTouch();
-
-            }
+            InputEvent inputEvent = (InputEvent)context.data;
+            if (inputEvent.touchId < -1 || IsDraging) return;  // 过滤无效输入
+            fingerId = inputEvent.touchId;  // 记录手指ID
+            pointerDownPosition = inputEvent.position;
+            OnPointerDown.Invoke(inputEvent.position);
+            pointDownTime = Time.realtimeSinceStartup;  // 记录按下时间
         }
-
-        //移动触摸
+        
         private void OnTouchMove(EventContext context)
         {
             InputEvent inputEvent = (InputEvent)context.data;
-            if (touchID != -1 && inputEvent.touchId == touchID)
+            if (fingerId != inputEvent.touchId) return;  // 检查手指ID匹配
+            this.dragTime = Time.realtimeSinceStartup - this.pointDownTime;  // 计算拖拽时间
+            // 计算拖拽方向和距离
+            Vector2 direction = inputEvent.position - (Vector2)pointerDownPosition;
+            float radius = Mathf.Clamp(Vector3.Magnitude(direction), 0, maxRadius);
+    
+            // 根据激活的轴向限制移动
+            Vector2 localPosition = new Vector2()
             {
-                Vector2 localPos = GRoot.inst.GlobalToLocal(new Vector2(inputEvent.x, inputEvent.y));
-                float posX = localPos.x;
-                float posY = localPos.y;
-                float moveX = posX - lastStageX;
-                float moveY = posY - lastStageY;
-                lastStageX = posX;
-                lastStageY = posY;
-                float buttonX = Btn_Joystick.x + moveX;
-                float buttonY = Btn_Joystick.y + moveY;
-
-                float deltaX = buttonX + Btn_Joystick.width / 2 - startStageX;
-                float deltaY = buttonY + Btn_Joystick.height / 2 - startStageY;
-
-                float rad = Mathf.Atan2(deltaY, deltaX);
-                float degree = rad * 180 / Mathf.PI;
-                joystick.rotation = degree + 90;
-
-                //设置范围
-                float maxX = radius * Mathf.Cos(rad);
-                float maxY = radius * Mathf.Sin(rad);
-                if (Mathf.Abs(deltaX) > Mathf.Abs(maxX))
-                {
-                    deltaX = maxX;
-                }
-                if (Mathf.Abs(deltaY) > Mathf.Abs(maxY))
-                {
-                    deltaY = maxY;
-                }
-
-                buttonX = startStageX + deltaX;
-                buttonY = startStageY + deltaY;
-
-                Btn_Joystick.SetXY(buttonX - Btn_Joystick.width / 2, buttonY - Btn_Joystick.height / 2);
-
-                onMove.Call(degree);
-            }
+                x = (activatedAxis == Direction.Both || activatedAxis == Direction.Horizontal) ? (direction.normalized * radius).x : 0 ,
+                y = (activatedAxis == Direction.Both || activatedAxis == Direction.Vertical) ? -(direction.normalized * radius).y : 0 //y这里需要取反FGUI默认的输入是从y轴向上的
+            };
+    
+            this.JoystickTransform.localPosition = this.originLocalPostion + new Vector3(localPosition.x, localPosition.y, 0);  // 更新摇杆位置
         }
-
-        //结束触摸
+        
         private void OnTouchEnd(EventContext context)
         {
             InputEvent inputEvent = (InputEvent)context.data;
-            if (touchID != -1 && inputEvent.touchId == touchID)
+            if (fingerId != inputEvent.touchId) return;
+            // 处理快速滑动（短时间内的移动）
+            if (this.dragTime < DRAG_TIME)
             {
-                touchID = -1;
-                joystick.rotation = joystick.rotation + 180;
-                JoystickCenter.visible = false;
-                tweener = Btn_Joystick.TweenMove(new Vector2(initX - Btn_Joystick.width / 2, initY - Btn_Joystick.height / 2), 0.3f).OnComplete(() => {
-                        tweener = null;
-                        Btn_Joystick.selected = false;
-                        joystick.rotation = 0;
-                        JoystickCenter.visible = true;
-                        JoystickCenter.SetXY(initX - JoystickCenter.width / 2, initY - JoystickCenter.height / 2);
-                        
-                });
+                if ((inputEvent.position - (Vector2)pointerDownPosition).magnitude > 50)
+                {
+                    Debug.Log($"Swipe screen");
+                    OnSwipeEvent.Invoke((inputEvent.position - (Vector2)pointerDownPosition).normalized);
+                }
             }
-            onEnd.Call();
+            RestJoystick();  // 重置摇杆
+            OnPointerUp.Invoke(inputEvent.position);
         }
+        #endregion
     }
 }

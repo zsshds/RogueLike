@@ -11,6 +11,7 @@ namespace ET.Client
         {
             UIObjectFactory.SetPackageItemExtension(ET.Client.Main.FUI_MainPanel.URL, typeof(ET.Client.Main.FUI_MainPanel));
             UIObjectFactory.SetPackageItemExtension(ET.Client.Main.FUI_Joystick.URL, typeof(ET.Client.Main.FUI_Joystick));
+            UIObjectFactory.SetPackageItemExtension(ET.Client.Main.FUI_JoystickComponent.URL, typeof(ET.Client.Main.FUI_JoystickComponent));
         }
     }
 }

@@ -8,9 +8,7 @@ namespace ET.Client.Main
     [EnableClass]
     public partial class FUI_MainPanel: GComponent
     {
-        public GGraph JoystickArea;
-        public GImage JoystickCenter;
-        public ET.Client.Main.FUI_Joystick Btn_Joystick;
+        public ET.Client.Main.FUI_JoystickComponent JoystickComponent;
         public const string URL = "ui://ngzx0fqyjfdx0";
 
         public static FUI_MainPanel CreateInstance()
@@ -21,9 +19,7 @@ namespace ET.Client.Main
         public override void ConstructFromXML(XML xml)
         {
             base.ConstructFromXML(xml);
-            JoystickArea = (GGraph)GetChildAt(0);
-            JoystickCenter = (GImage)GetChildAt(1);
-            Btn_Joystick = (ET.Client.Main.FUI_Joystick)GetChildAt(2);
+            JoystickComponent = (ET.Client.Main.FUI_JoystickComponent)GetChildAt(0);
         }
     }
 }

@@ -1,3 +1,4 @@
+using ET.Client.Main;
 using FairyGUI;
 using UnityEngine;
 
@@ -18,13 +19,20 @@ namespace ET.Client
         {
             self.AddJoystickLogic();
         }
-        
+
+        #region 摇杆相关逻辑
         private static void AddJoystickLogic(this MainPanel self)
         {
-            //GameObject panel = self.FUIMainPanel.displayObject.gameObject;
-            //GameObject panel = GameObject.Find(self.FUIMainPanel.gameObjectName);
-            JoystickMono joystickMono = self.FUIMainPanel.displayObject.gameObject.AddComponent<JoystickMono>();
-            joystickMono.Init(self.FUIMainPanel.Btn_Joystick, self.FUIMainPanel.Btn_Joystick.GetChild("Joystick"),self.FUIMainPanel.JoystickArea, self.FUIMainPanel.JoystickCenter);
+            FUI_JoystickComponent joystickComponent = self.FUIMainPanel.JoystickComponent;
+            Joystick joystickMono = joystickComponent.displayObject.gameObject.AddComponent<Joystick>();
+            joystickMono.Init(joystickComponent.Btn_Joystick, joystickComponent.Img_JoystickBG);
         }
+
+        private static void OnJoyStickDown(this MainPanel self)
+        {
+            
+        }
+        #endregion
+        
     }
 }
