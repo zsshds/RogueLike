@@ -7,6 +7,8 @@ namespace ET.Client
     public class MainPanel: Entity, IAwake, IShow
     {
         private FUI_MainPanel _fuiMainPanel;
+        //操作组件
+        public OperaComponent OperaComponent { get; set; }
 
         public FUI_MainPanel FUIMainPanel
         {

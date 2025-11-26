@@ -11,7 +11,6 @@ namespace ET.Client
         private static void Awake(this OperaComponent self)
         {
             self.mapMask = LayerMask.GetMask("Map");
-            Log.Error($"OperaComponent 所属 Scene为{self.Scene().Name}");
         }
 
         [EntitySystem]

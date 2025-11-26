@@ -17,6 +17,7 @@ namespace ET.Client
         [EntitySystem]
         private static void Show(this MainPanel self)
         {
+            self.OperaComponent = self.Root().CurrentScene().GetComponent<OperaComponent>();
             self.AddJoystickLogic();
         }
 
@@ -35,34 +36,28 @@ namespace ET.Client
         //摇杆事件
         private static void JoystickTouchEnd(this MainPanel self, Vector2 v)
         {
-            OperaComponent operaComponent = self.Root().Scene().GetComponent<OperaComponent>();
-            if (operaComponent != null)
+            if (self.OperaComponent != null)
             {
-                operaComponent.StopMove();
+                self.OperaComponent.StopMove();
             }
             else
             {
-                Log.Error($"OperateInfos is null");
+                Log.Error($"self.OperaComponent is null");
             }
-            
-            //self.Scene().GetComponent<OperaComponent>().StopMove();
         }
         
         private static void JoystickTouchMove(this MainPanel self, Vector2 v)
         { 
             if (v == Vector2.zero)
                 return;
-            OperaComponent operaComponent = self.Root().Scene().GetComponent<OperaComponent>();
-            if (operaComponent != null)
+            if (self.OperaComponent != null)
             {
-                operaComponent.OnMove(v);
+                self.OperaComponent.OnMove(v);
             }
             else
             {
-                Log.Warning($"当前Scene 为 {self.Scene().Name}， root为 {self.Root().Name}");
-                Log.Error($"OperateInfos is null");
+                Log.Error($"self.OperaComponent is null");
             }
-            //self.Scene().GetComponent<OperaComponent>().OnMove(v);
         }
         #endregion
         
