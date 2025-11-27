@@ -82,6 +82,18 @@ message PlayerInfo
 	int32 AvatarIndex = 8;
 }
 
+message TransformInfo
+{
+	int64 UnitId = 1;
+	Unity.Mathematics.float3 Position = 4;
+	Unity.Mathematics.float3 Forward = 5;
+}
+
+message M2C_SyncUnitTransforms // IMessage
+{
+	repeated TransformInfo TransformInfos = 1;
+}
+
 message M2C_CreateUnits // IMessage
 {
 	repeated UnitInfo Units = 1;
