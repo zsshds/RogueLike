@@ -6,6 +6,9 @@ namespace ET
         public const int RouterHttpPort = 30300;
         public const int SessionTimeoutTime = 30 * 1000;
         
-        
+        /// <summary>
+        /// 不同玩法匹配人数配表即可
+        /// </summary>
+        public const int StateSyncMatchCount = 1;
     }
 }

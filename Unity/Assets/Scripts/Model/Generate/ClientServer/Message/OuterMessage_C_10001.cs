@@ -277,6 +277,102 @@ namespace ET
     }
 
     [MemoryPackable]
+    [Message(OuterMessage.RoomInfo)]
+    public partial class RoomInfo : MessageObject
+    {
+        public static RoomInfo Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(RoomInfo), isFromPool) as RoomInfo;
+        }
+
+        /// <summary>
+        /// 加入的房间Id
+        /// </summary>
+        [MemoryPackOrder(0)]
+        public long RoomId { get; set; }
+
+        [MemoryPackOrder(1)]
+        public List<PlayerInfo> PlayerInfo { get; set; } = new();
+
+        [MemoryPackOrder(2)]
+        public int PlayMode { get; set; }
+
+        /// <summary>
+        /// 是否满人，满人开始倒计时进入战场
+        /// </summary>
+        [MemoryPackOrder(3)]
+        public bool IsReady { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RoomId = default;
+            this.PlayerInfo.Clear();
+            this.PlayMode = default;
+            this.IsReady = default;
+
+            ObjectPool.Instance.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(OuterMessage.PlayerInfo)]
+    public partial class PlayerInfo : MessageObject
+    {
+        public static PlayerInfo Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(PlayerInfo), isFromPool) as PlayerInfo;
+        }
+
+        [MemoryPackOrder(0)]
+        public string Account { get; set; }
+
+        [MemoryPackOrder(1)]
+        public long UnitId { get; set; }
+
+        [MemoryPackOrder(2)]
+        public long SessionId { get; set; }
+
+        [MemoryPackOrder(3)]
+        public long RoomId { get; set; }
+
+        [MemoryPackOrder(4)]
+        public int CampId { get; set; }
+
+        [MemoryPackOrder(5)]
+        public long PlayerId { get; set; }
+
+        [MemoryPackOrder(6)]
+        public string PlayerName { get; set; }
+
+        [MemoryPackOrder(7)]
+        public int AvatarIndex { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.Account = default;
+            this.UnitId = default;
+            this.SessionId = default;
+            this.RoomId = default;
+            this.CampId = default;
+            this.PlayerId = default;
+            this.PlayerName = default;
+            this.AvatarIndex = default;
+
+            ObjectPool.Instance.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
     [Message(OuterMessage.M2C_CreateUnits)]
     public partial class M2C_CreateUnits : MessageObject, IMessage
     {
@@ -1816,50 +1912,52 @@ namespace ET
         public const ushort G2C_EnterMap = 10007;
         public const ushort MoveInfo = 10008;
         public const ushort UnitInfo = 10009;
-        public const ushort M2C_CreateUnits = 10010;
-        public const ushort M2C_CreateMyUnit = 10011;
-        public const ushort M2C_StartSceneChange = 10012;
-        public const ushort M2C_RemoveUnits = 10013;
-        public const ushort C2M_PathfindingResult = 10014;
-        public const ushort C2M_Stop = 10015;
-        public const ushort M2C_PathfindingResult = 10016;
-        public const ushort M2C_Stop = 10017;
-        public const ushort C2G_Ping = 10018;
-        public const ushort G2C_Ping = 10019;
-        public const ushort G2C_Test = 10020;
-        public const ushort C2M_Reload = 10021;
-        public const ushort M2C_Reload = 10022;
-        public const ushort C2R_Login = 10023;
-        public const ushort R2C_Login = 10024;
-        public const ushort C2G_LoginGate = 10025;
-        public const ushort G2C_LoginGate = 10026;
-        public const ushort G2C_TestHotfixMessage = 10027;
-        public const ushort C2M_TestRobotCase = 10028;
-        public const ushort M2C_TestRobotCase = 10029;
-        public const ushort C2M_TestRobotCase2 = 10030;
-        public const ushort M2C_TestRobotCase2 = 10031;
-        public const ushort C2M_TransferMap = 10032;
-        public const ushort M2C_TransferMap = 10033;
-        public const ushort C2G_Benchmark = 10034;
-        public const ushort G2C_Benchmark = 10035;
-        public const ushort C2R_LoginAccount = 10036;
-        public const ushort R2C_LoginAccount = 10037;
-        public const ushort A2C_Disconnect = 10038;
-        public const ushort ServerInfosProto = 10039;
-        public const ushort C2R_GetServerInfos = 10040;
-        public const ushort R2C_GetServerInfos = 10041;
-        public const ushort RoleInfoProto = 10042;
-        public const ushort C2R_GetRoles = 10043;
-        public const ushort R2C_GetRoles = 10044;
-        public const ushort C2R_CreateRole = 10045;
-        public const ushort R2C_CreatRole = 10046;
-        public const ushort C2R_DeleteRole = 10047;
-        public const ushort R2C_DeleteRole = 10048;
-        public const ushort C2R_GetRealmKey = 10049;
-        public const ushort R2C_GetRealmKey = 10050;
-        public const ushort C2G_LoginGameGate = 10051;
-        public const ushort G2C_LoginGameGate = 10052;
-        public const ushort C2G_EnterGame = 10053;
-        public const ushort G2C_EnterGame = 10054;
+        public const ushort RoomInfo = 10010;
+        public const ushort PlayerInfo = 10011;
+        public const ushort M2C_CreateUnits = 10012;
+        public const ushort M2C_CreateMyUnit = 10013;
+        public const ushort M2C_StartSceneChange = 10014;
+        public const ushort M2C_RemoveUnits = 10015;
+        public const ushort C2M_PathfindingResult = 10016;
+        public const ushort C2M_Stop = 10017;
+        public const ushort M2C_PathfindingResult = 10018;
+        public const ushort M2C_Stop = 10019;
+        public const ushort C2G_Ping = 10020;
+        public const ushort G2C_Ping = 10021;
+        public const ushort G2C_Test = 10022;
+        public const ushort C2M_Reload = 10023;
+        public const ushort M2C_Reload = 10024;
+        public const ushort C2R_Login = 10025;
+        public const ushort R2C_Login = 10026;
+        public const ushort C2G_LoginGate = 10027;
+        public const ushort G2C_LoginGate = 10028;
+        public const ushort G2C_TestHotfixMessage = 10029;
+        public const ushort C2M_TestRobotCase = 10030;
+        public const ushort M2C_TestRobotCase = 10031;
+        public const ushort C2M_TestRobotCase2 = 10032;
+        public const ushort M2C_TestRobotCase2 = 10033;
+        public const ushort C2M_TransferMap = 10034;
+        public const ushort M2C_TransferMap = 10035;
+        public const ushort C2G_Benchmark = 10036;
+        public const ushort G2C_Benchmark = 10037;
+        public const ushort C2R_LoginAccount = 10038;
+        public const ushort R2C_LoginAccount = 10039;
+        public const ushort A2C_Disconnect = 10040;
+        public const ushort ServerInfosProto = 10041;
+        public const ushort C2R_GetServerInfos = 10042;
+        public const ushort R2C_GetServerInfos = 10043;
+        public const ushort RoleInfoProto = 10044;
+        public const ushort C2R_GetRoles = 10045;
+        public const ushort R2C_GetRoles = 10046;
+        public const ushort C2R_CreateRole = 10047;
+        public const ushort R2C_CreatRole = 10048;
+        public const ushort C2R_DeleteRole = 10049;
+        public const ushort R2C_DeleteRole = 10050;
+        public const ushort C2R_GetRealmKey = 10051;
+        public const ushort R2C_GetRealmKey = 10052;
+        public const ushort C2G_LoginGameGate = 10053;
+        public const ushort G2C_LoginGameGate = 10054;
+        public const ushort C2G_EnterGame = 10055;
+        public const ushort G2C_EnterGame = 10056;
     }
 }

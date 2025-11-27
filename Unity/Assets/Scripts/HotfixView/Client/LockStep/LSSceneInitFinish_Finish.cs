@@ -15,8 +15,8 @@ namespace ET.Client
             {
                 room.AddComponent<LSOperaComponent>();
             }
-
-            await UIHelper.Remove(clientScene, UIType.UILSLobby);
+            
+            room.Root().GetComponent<UIComponent>().CloseWindow(WindowID.WindowID_LSLobby);
             await ETTask.CompletedTask;
         }
     }

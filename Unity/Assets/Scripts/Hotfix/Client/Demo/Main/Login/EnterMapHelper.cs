@@ -123,5 +123,17 @@ namespace ET.Client
                 Log.Error(e);
             }
         }
+        
+        public static async ETTask StateSyncMatch(Fiber fiber)
+        {
+            try
+            {
+                G2C_StateSyncMatch g2CEnterMap = await fiber.Root.GetComponent<ClientSenderComponent>().Call(C2G_StateSyncMatch.Create()) as G2C_StateSyncMatch;
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+            }
+        }
     }
 }

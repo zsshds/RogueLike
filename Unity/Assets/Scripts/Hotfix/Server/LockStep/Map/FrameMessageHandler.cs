@@ -4,12 +4,12 @@ using System.Collections.Generic;
 namespace ET.Server
 {
     [MessageHandler(SceneType.RoomRoot)]
-    public class FrameMessageHandler: MessageHandler<Scene, FrameMessage>
+    public class FrameMessageHandler : MessageHandler<Scene, FrameMessage>
     {
         protected override async ETTask Run(Scene root, FrameMessage message)
         {
             using FrameMessage _ = message;  // 让消息回到池中
-            
+
             Room room = root.GetComponent<Room>();
             FrameBuffer frameBuffer = room.FrameBuffer;
             if (message.Frame % (1000 / LSConstValue.UpdateInterval) == 0)
@@ -33,7 +33,7 @@ namespace ET.Server
                 Log.Warning($"FrameMessage > AuthorityFrame + 10 discard: {message}");
                 return;
             }
-            
+
             OneFrameInputs oneFrameInputs = frameBuffer.FrameInputs(message.Frame);
             if (oneFrameInputs == null)
             {

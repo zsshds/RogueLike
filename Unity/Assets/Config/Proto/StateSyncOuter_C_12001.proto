@@ -1,3 +1,60 @@
+// ResponseType G2C_StateSyncMatch
+message C2G_StateSyncMatch // ISessionRequest
+{
+	int32 RpcId = 1;
+}
+
+message G2C_StateSyncMatch // ISessionResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+}
+
+/// 刷新匹配信息
+message G2C_StateSyncRefreshMatch // IMessage
+{
+	int32 RpcId = 1;
+	/// 房间信息
+	RoomInfo RoomInfo = 2;
+}
+
+
+/// 匹配成功，通知客户端切换场景
+message Match2G_StateSyncNotifyMatchSuccess // IMessage
+{
+	int32 RpcId = 1;
+	/// 房间的ActorId
+	ActorId ActorId = 2;
+}
+
+/// 客户端通知房间切换场景完成
+message C2Room_StateSyncChangeSceneFinish // IRoomMessage
+{
+	int64 PlayerId = 1;
+}
+
+
+/// 房间通知客户端进入战斗
+message Room2C_StateSyncStart // IMessage
+{
+	int64 StartTime = 1;
+	repeated UnitInfo UnitInfo = 2;
+}
+
+
+message Room2C_StateSyncAdjustUpdateTime // IMessage
+{
+	int32 DiffTime = 1;
+}
+
+message G2C_StateSyncReconnect // IMessage
+{
+	int64 StartTime = 1;
+	repeated UnitInfo UnitInfos = 2;
+	int32 Frame = 3;
+}
+
 message OperateInfo
 {
     int32 OperateType = 1; //操作类型
@@ -5,4 +62,29 @@ message OperateInfo
 	Unity.Mathematics.float3 Vec3 = 3; //v3参数
 	int64 Value1 = 4;
 	int64 Value2 = 5;
+}
+
+message C2Room_Operation // IRoomMessage
+{
+	int64 PlayerId = 1;
+	int64 Id = 2;
+	repeated OperateInfo OperateInfos = 3;
+	
+}
+
+message Room2C_Operation // IMessage
+{
+	int64 Id = 1;
+	repeated OperateReplyInfo OperateInfos = 2;
+}
+
+message OperateReplyInfo
+{
+    int32 OperateType = 1; //操作类型
+	int32 Status = 2;
+}
+
+message Room2C_SyncUnits // IMessage
+{
+	repeated UnitInfo Units = 1;
 }
