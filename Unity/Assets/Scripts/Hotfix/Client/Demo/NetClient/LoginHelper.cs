@@ -45,7 +45,6 @@ namespace ET.Client
                 serverInfo.FromMessage(serverInfoProto);
                 serverInfoComponent.AddServerInfo(serverInfo);
             }
-            
             await EventSystem.Instance.PublishAsync(root, new LoginFinish());
         }
 
@@ -109,9 +108,9 @@ namespace ET.Client
             }
             Log.Info("登录游戏成功");
             root.GetComponent<PlayerComponent>().MyId = netClient2MainLoginGame.PlayerId;
-            // 等待场景切换完成
-            await root.GetComponent<ObjectWait>().Wait<Wait_SceneChangeFinish>();
-            EventSystem.Instance.Publish(root, new EnterMapFinish());
+            // // 等待场景切换完成
+            // await root.GetComponent<ObjectWait>().Wait<Wait_SceneChangeFinish>();
+            // EventSystem.Instance.Publish(root, new EnterMapFinish());
         }
     }
 }

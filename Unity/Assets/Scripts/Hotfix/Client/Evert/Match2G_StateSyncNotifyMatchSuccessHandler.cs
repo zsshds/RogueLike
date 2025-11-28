@@ -5,7 +5,7 @@
     {
         protected override async ETTask Run(Scene root, Match2G_StateSyncNotifyMatchSuccess message)
         {
-            await SceneChangeHelper.SceneChangeTo(root, "Map3", message.ActorId.InstanceId);
+            await SceneChangerStageSyncHelper.SceneChangeTo(root, "HomeScene", message.ActorId.InstanceId);
         }
     }
 }

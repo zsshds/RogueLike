@@ -75,7 +75,7 @@ namespace ET.Server
                                 await GateMapFactory.Create(gateMapComponent, player.Id, IdGenerater.Instance.GenerateInstanceId(), "GateMap");
                         Scene scene = gateMapComponent.Scene;
                         //这里可以从DB中加载Unit
-                        Unit unit = UnitFactory.Create(scene, player.Id, UnitType.Player);
+                        Unit unit = UnitFactory.Create(scene, player.Id, EUnitType.Player);
                         unit.Position = new float3(0, 0.7f, 0);
                         long unitId = unit.Id;
                         //获取对应mapConfig

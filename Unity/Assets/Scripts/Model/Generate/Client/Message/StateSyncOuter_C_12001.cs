@@ -47,6 +47,9 @@ namespace ET
         [MemoryPackOrder(2)]
         public string Message { get; set; }
 
+        [MemoryPackOrder(3)]
+        public long UnitId { get; set; }
+
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -57,6 +60,7 @@ namespace ET
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
+            this.UnitId = default;
 
             ObjectPool.Instance.Recycle(this);
         }

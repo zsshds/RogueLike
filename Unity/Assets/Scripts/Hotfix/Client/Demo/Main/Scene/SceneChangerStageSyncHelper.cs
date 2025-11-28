@@ -22,7 +22,8 @@
             
             foreach (UnitInfo unitInfo in waitRoom2CStart.Message.UnitInfo)
             {
-
+                //这里不做限制，因为现在设置的是一个人，后续做多人游戏时，也需要显示队友
+                //
                 Unit unit = UnitFactory.Create(currentScene, unitInfo);
                 unitComponent.Add(unit);
                 root.RemoveComponent<AIComponent>();

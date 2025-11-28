@@ -257,6 +257,9 @@ namespace ET
         [MemoryPackOrder(6)]
         public MoveInfo MoveInfo { get; set; }
 
+        [MemoryPackOrder(7)]
+        public PlayerInfo PlayerInfo { get; set; }
+
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -271,6 +274,7 @@ namespace ET
             this.Forward = default;
             this.KV.Clear();
             this.MoveInfo = default;
+            this.PlayerInfo = default;
 
             ObjectPool.Instance.Recycle(this);
         }
