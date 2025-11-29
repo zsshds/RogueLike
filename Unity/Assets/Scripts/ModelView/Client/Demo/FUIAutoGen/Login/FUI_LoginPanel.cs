@@ -10,7 +10,6 @@ namespace ET.Client.Login
     {
         public GTextInput TxtIn_Account;
         public GTextInput TxtIn_Pasword;
-        public GGroup InputGroup;
         public ET.Client.Login.FUI_LoginButton Btn_Login;
         public const string URL = "ui://9q0q76hci0ha0";
 
@@ -22,10 +21,9 @@ namespace ET.Client.Login
         public override void ConstructFromXML(XML xml)
         {
             base.ConstructFromXML(xml);
-            TxtIn_Account = (GTextInput)GetChildAt(3);
-            TxtIn_Pasword = (GTextInput)GetChildAt(6);
-            InputGroup = (GGroup)GetChildAt(7);
-            Btn_Login = (ET.Client.Login.FUI_LoginButton)GetChildAt(8);
+            TxtIn_Account = (GTextInput)GetChildAt(2);
+            TxtIn_Pasword = (GTextInput)GetChildAt(4);
+            Btn_Login = (ET.Client.Login.FUI_LoginButton)GetChildAt(5);
         }
     }
 }
