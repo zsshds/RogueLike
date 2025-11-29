@@ -33,4 +33,9 @@
         public Unit Unit;
     }
     
+    public struct AfterMyUnitCreate
+    {
+        public Unit Unit;
+    }
+    
 }

@@ -1,4 +1,6 @@
-﻿namespace ET.Client
+﻿using System;
+
+namespace ET.Client
 {
     [MessageHandler(SceneType.NetClient)]
     public class Main2NetClient_LoginGameHandler : MessageHandler<Scene, Main2NetClient_LoginGame, NetClient2Main_LoginGame>
@@ -28,15 +30,25 @@
                 return;
             }
             Log.Info($"{request.RoleId} 登录Gate成功");
-            G2C_EnterGame g2CEnterGame = await gateSession.Call(C2G_EnterGame.Create()) as G2C_EnterGame;
-            if (g2CLoginGameGate.Error != ErrorCode.ERR_Success)
-            { 
-                response.Error = g2CEnterGame.Error;
-                Log.Error($"{request.RoleId} 登录Map失败");
-                return;
+            
+            //这里由于帧同步需要去room的原因，做一些更改
+            // G2C_EnterGame g2CEnterGame = await gateSession.Call(C2G_EnterGame.Create()) as G2C_EnterGame;
+            // if (g2CLoginGameGate.Error != ErrorCode.ERR_Success)
+            // { 
+            //     response.Error = g2CEnterGame.Error;
+            //     Log.Error($"{request.RoleId} 登录Map失败");
+            //     return;
+            // }
+            // Log.Info($"{request.RoleId} 登录Map成功");
+            try
+            {
+                G2C_StateSyncMatch g2CEnterMap = await gateSession.Call(C2G_StateSyncMatch.Create()) as G2C_StateSyncMatch;
+                response.PlayerId = g2CEnterMap.UnitId;
             }
-            Log.Info($"{request.RoleId} 登录Map成功");
-            response.PlayerId = g2CEnterGame.MyUnitId;
+            catch (Exception e)
+            {
+                Log.Error(e);
+            }
         }
     }
 }

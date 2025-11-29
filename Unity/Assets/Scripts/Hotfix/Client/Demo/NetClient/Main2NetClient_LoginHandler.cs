@@ -31,49 +31,20 @@ namespace ET.Client
             R2C_LoginAccount r2CLoginAccount;
             Session session = await netComponent.CreateRouterSession(realmAddress, account, password);
             session.AddComponent<ClientSessionErrorComponent>();
-            //这里有大坑，如果使用using包裹session，执行完成后session消耗，在调用clientSenderComponent.Call是拿不到session的 操！！！
-            //using(Session session = await netComponent.CreateRouterSession(realmAddress, account, password))
-            //{
-                // C2R_Login c2RLogin = C2R_Login.Create();
-                // c2RLogin.Account = account;
-                // c2RLogin.Password = password;
-                // //请求中这个这个Call方法所带的参数是服务端返回的网络数据结构
-                // r2CLogin = (R2C_Login)await session.Call(c2RLogin);
-                // if (r2CLogin.Error != ErrorCode.ERR_Success)
-                // {
-                //     response.Error = r2CLogin.Error;
-                //     return;
-                // }
-                c2RLoginAccount.Account = account;
-                c2RLoginAccount.Password = password;
-                r2CLoginAccount = (R2C_LoginAccount)await session.Call(c2RLoginAccount);
-                if (r2CLoginAccount.Error == ErrorCode.ERR_Success)
-                {
-                    root.AddComponent<SessionComponent>().Session = session;
-                }
-                else
-                {
-                    session?.Dispose();
-                }
-
-                response.ToKen = r2CLoginAccount.Token;
-                response.Message = r2CLoginAccount.Message;
-                response.Error = r2CLoginAccount.Error;
-            //}
-
-            // // 创建一个gate Session,并且保存到SessionComponent中
-            // Session gateSession = await netComponent.CreateRouterSession(NetworkHelper.ToIPEndPoint(r2CLogin.Address), account, password);
-            // gateSession.AddComponent<ClientSessionErrorComponent>();
-            // root.AddComponent<SessionComponent>().Session = gateSession;
-            // //请求gate
-            // C2G_LoginGate c2GLoginGate = C2G_LoginGate.Create();
-            // c2GLoginGate.Key = r2CLogin.Key;
-            // c2GLoginGate.GateId = r2CLogin.GateId;
-            // G2C_LoginGate g2CLoginGate = (G2C_LoginGate)await gateSession.Call(c2GLoginGate);
-            //
-            // Log.Debug("登陆gate成功!");
-            //
-            // response.PlayerId = g2CLoginGate.PlayerId;
+            c2RLoginAccount.Account = account;
+            c2RLoginAccount.Password = password;
+            r2CLoginAccount = (R2C_LoginAccount)await session.Call(c2RLoginAccount);
+            if (r2CLoginAccount.Error == ErrorCode.ERR_Success)
+            {
+                root.AddComponent<SessionComponent>().Session = session;
+            }
+            else
+            {
+                session?.Dispose();
+            }
+            response.ToKen = r2CLoginAccount.Token;
+            response.Message = r2CLoginAccount.Message;
+            response.Error = r2CLoginAccount.Error; ;
         }
     }
 }

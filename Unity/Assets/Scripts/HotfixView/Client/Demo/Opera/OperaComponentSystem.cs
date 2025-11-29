@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace ET.Client
@@ -26,12 +27,12 @@ namespace ET.Client
                     self.Root().GetComponent<ClientSenderComponent>().Send(c2MPathfindingResult);
                 }
             }
-            
+
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 self.Test1().Coroutine();
             }
-                
+
             if (Input.GetKeyDown(KeyCode.W))
             {
                 self.Test2().Coroutine();
@@ -50,6 +51,20 @@ namespace ET.Client
             }
         }
         
+        [EntitySystem]
+        private static void LateUpdate(this ET.Client.OperaComponent self)
+        {
+            //每帧把当前帧收集的操作发送给服务端，随后清除
+             if (self.OperateInfos.Count == 0)
+                 return;
+             self.OperateInfosTemp.Clear();
+             self.OperateInfosTemp.AddRange(self.OperateInfos);
+             C2Room_Operation c2RoomOperation = C2Room_Operation.Create();
+             c2RoomOperation.OperateInfos = self.OperateInfosTemp;
+             self.Root().GetComponent<ClientSenderComponent>().Send(c2RoomOperation);
+             self.OperateInfos.Clear();  
+        }
+
         private static async ETTask Test1(this OperaComponent self)
         {
             Log.Debug($"Croutine 1 start1 ");
@@ -60,7 +75,7 @@ namespace ET.Client
 
             Log.Debug($"Croutine 1 end1");
         }
-            
+
         private static async ETTask Test2(this OperaComponent self)
         {
             Log.Debug($"Croutine 2 start2");
@@ -70,5 +85,36 @@ namespace ET.Client
             }
             Log.Debug($"Croutine 2 end2");
         }
+
+        
+        public static void OnMove(this OperaComponent self, Vector2 v2)
+        {
+            Log.Info($"press joystick: {v2}");
+            // C2M_JoystickMove c2mJoystickMove = new C2M_JoystickMove() { MoveForward = new float3(v2.x, 0, v2.y) };
+            // self.ClientScene().GetComponent<PlayerSessionComponent>().Session.Send(c2mJoystickMove);
+            OperateInfo operateInfo = OperateInfo.Create();
+            operateInfo.OperateType = (int)EOperateType.Move;
+            operateInfo.InputType = (int)EInputType.KeyDown;
+            operateInfo.Vec3 = new float3(v2.x, 0, v2.y);
+            self.OperateInfos.Add(operateInfo);
+        }
+        
+        public static void StopMove(this OperaComponent self)
+        {
+            //这里由于使用到了摇杆的原因，需要帧同步，定义一个OP消息给后端
+            OperateInfo operateInfo = OperateInfo.Create();
+            operateInfo.OperateType = (int)EOperateType.Move;
+            operateInfo.InputType = (int)EInputType.KeyUp;
+            self.OperateInfos.Add(operateInfo);
+            if (self.OperateInfos != null)
+            {
+                self.OperateInfos.Add(operateInfo);
+            }
+            else
+            {
+                Log.Error($"OperateInfos is null");
+            }
+        }
+        
     }
 }

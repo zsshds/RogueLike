@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.Mathematics;
+using UnityEngine;
 
 namespace ET.Client
 {
@@ -17,8 +18,8 @@ namespace ET.Client
         {
             if (self.TargetObject != null)
             {
-                Vector3 pos = self.TargetObject.transform.position;
-                self.Transform.position = new Vector3(pos.x, 5, pos.z - 4f);
+                self.Transform.position = math.lerp(self.Camera.transform.position, self.TargetObject.transform.position + new Vector3(0, 7, -6), Time.deltaTime * 2.5f);
+                //self.Transform.position = self.TargetObject.transform.position + new Vector3(0, 5, -4);
             }
         }
     }

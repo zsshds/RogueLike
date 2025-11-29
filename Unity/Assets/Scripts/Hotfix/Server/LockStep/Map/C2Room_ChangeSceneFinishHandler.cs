@@ -4,8 +4,8 @@ using TrueSync;
 namespace ET.Server
 {
     [MessageHandler(SceneType.RoomRoot)]
-    [FriendOf(typeof (RoomServerComponent))]
-    public class C2Room_ChangeSceneFinishHandler: MessageHandler<Scene, C2Room_ChangeSceneFinish>
+    [FriendOf(typeof(RoomServerComponent))]
+    public class C2Room_ChangeSceneFinishHandler : MessageHandler<Scene, C2Room_ChangeSceneFinish>
     {
         protected override async ETTask Run(Scene root, C2Room_ChangeSceneFinish message)
         {
@@ -13,12 +13,12 @@ namespace ET.Server
             RoomServerComponent roomServerComponent = room.GetComponent<RoomServerComponent>();
             RoomPlayer roomPlayer = room.GetComponent<RoomServerComponent>().GetChild<RoomPlayer>(message.PlayerId);
             roomPlayer.Progress = 100;
-            
+
             if (!roomServerComponent.IsAllPlayerProgress100())
             {
                 return;
             }
-            
+
             await room.Fiber.Root.GetComponent<TimerComponent>().WaitAsync(1000);
 
             Room2C_Start room2CStart = Room2C_Start.Create();

@@ -7,6 +7,7 @@ namespace ET.Client
         Invalid = 0,
         LoginPanel,
         SelectServerPanel,
+        MainPanel,
         // <last line>
     }
 }

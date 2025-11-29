@@ -11,6 +11,9 @@ namespace ET
         private readonly ConcurrentDictionary<int, Thread> dictionary = new();
         
         private readonly FiberManager fiberManager;
+        private DateTime dt1970;
+        private long lastTimeTicks = 0;
+        private long totalTicksSinceStart = 0;
 
         public ThreadScheduler(FiberManager fiberManager)
         {
@@ -45,6 +48,20 @@ namespace ET
                 
                 fiber.Update();
                 fiber.LateUpdate();
+                
+                long timeNow = DateTime.UtcNow.Ticks - this.dt1970.Ticks;
+                long deltaTime = timeNow - this.lastTimeTicks;
+                if (this.lastTimeTicks == this.dt1970.Ticks)
+                {
+                    deltaTime = 0;
+                }
+                this.totalTicksSinceStart += deltaTime;
+                this.lastTimeTicks = timeNow;
+                while (this.totalTicksSinceStart >= DefineCore.FixedDeltaTicks)
+                {
+                    this.totalTicksSinceStart -= DefineCore.FixedDeltaTicks;
+                    fiber.FixedUpdate();
+                }
 
                 Thread.Sleep(1);
             }
