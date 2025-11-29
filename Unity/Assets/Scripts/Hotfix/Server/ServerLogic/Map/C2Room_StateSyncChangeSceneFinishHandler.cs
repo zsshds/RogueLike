@@ -26,7 +26,7 @@ namespace ET.Server
             {
                 UnitInfo unitInfo = UnitInfo.Create();
                 unitInfo.UnitId = rp.Id;
-                unitInfo.Position = new float3(RandomGenerator.RandomNumber(-3, 3), 0, RandomGenerator.RandomNumber(-3, 3));
+                unitInfo.Position = new float3(RandomGenerator.RandomNumber(-2, 2), 0.6f, RandomGenerator.RandomNumber(-2, 2));
                 unitInfo.Forward = new float3(0, 0, 1);
                 unitInfo.PlayerInfo = PlayerInfo.Create();
                 unitInfo.PlayerInfo.PlayerId = rp.Id;

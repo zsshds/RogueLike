@@ -97,7 +97,42 @@ namespace ET
             // Fiber调度完成，要还原成默认的上下文，否则unity的回调会找不到正确的上下文
             SynchronizationContext.SetSynchronizationContext(this.threadSynchronizationContext);
         }
+        
+        public void FixedUpdate()
+        {
+            int count = this.idQueue.Count;
+            while (count-- > 0)
+            {
+                if (!this.idQueue.TryDequeue(out int id))
+                {
+                    continue;
+                }
 
+                Fiber fiber = this.fiberManager.Get(id);
+                if (fiber == null)
+                {
+                    continue;
+                }
+
+                if (fiber.IsDisposed)
+                {
+                    continue;
+                }
+
+                Fiber.Instance = fiber;
+                SynchronizationContext.SetSynchronizationContext(fiber.ThreadSynchronizationContext);
+                fiber.FixedUpdate();
+                Fiber.Instance = null;
+                
+                this.idQueue.Enqueue(id);
+            }
+
+            while (this.addIds.Count > 0)
+            {
+                this.addIds.TryDequeue(out int result);
+                this.idQueue.Enqueue(result);
+            }
+        }
 
         public void Add(int fiberId = 0)
         {

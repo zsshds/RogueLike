@@ -58,7 +58,12 @@ namespace ET
         private void Update()
         {
             if (this.IsDraging && this.dragTime > DRAG_TIME)
-                OnJoystickTouchMove?.Invoke(JoystickTransform.localPosition / maxRadius); //fixedupdate 为物理更新，摇杆操作放在常规 update 就好
+            {
+                Vector3 local = this.JoystickTransform.localPosition;
+                local.x -= this.offsetX;
+                local.y -= this.offsetY;
+                OnJoystickTouchMove?.Invoke(local / maxRadius); //fixedupdate 为物理更新，摇杆操作放在常规 update 就好
+            }
         }
         
         private void OnDisable()
@@ -90,21 +95,54 @@ namespace ET
         
         private void OnTouchMove(EventContext context)
         {
+            // InputEvent inputEvent = (InputEvent)context.data;
+            // if (fingerId != inputEvent.touchId) return;  // 检查手指ID匹配
+            // this.dragTime = Time.realtimeSinceStartup - this.pointDownTime;  // 计算拖拽时间
+            // // 计算拖拽方向和距离
+            // Vector2 direction = inputEvent.position - (Vector2)pointerDownPosition;
+            // float radius = Mathf.Clamp(Vector3.Magnitude(direction), 0, maxRadius);
+            //
+            // // 根据激活的轴向限制移动
+            // Vector2 localPosition = new Vector2()
+            // {
+            //     x = (activatedAxis == Direction.Both || activatedAxis == Direction.Horizontal) ? (direction.normalized * radius).x : 0 ,
+            //     y = (activatedAxis == Direction.Both || activatedAxis == Direction.Vertical) ? -(direction.normalized * radius).y : 0 //y这里需要取反FGUI默认的输入是从y轴向上的
+            // };
+            //
+            // this.JoystickTransform.localPosition = this.originLocalPostion + new Vector3(localPosition.x, localPosition.y, 0);  // 更新摇杆位置
+            
             InputEvent inputEvent = (InputEvent)context.data;
-            if (fingerId != inputEvent.touchId) return;  // 检查手指ID匹配
-            this.dragTime = Time.realtimeSinceStartup - this.pointDownTime;  // 计算拖拽时间
+            if (fingerId != inputEvent.touchId) return;
+    
+            this.dragTime = Time.realtimeSinceStartup - this.pointDownTime;
+    
             // 计算拖拽方向和距离
             Vector2 direction = inputEvent.position - (Vector2)pointerDownPosition;
-            float radius = Mathf.Clamp(Vector3.Magnitude(direction), 0, maxRadius);
+            float distance = Vector2.Distance(inputEvent.position, pointerDownPosition);
+            float radius = Mathf.Clamp(distance, 0, maxRadius);
+    
+            // 计算归一化方向向量
+            Vector2 normalizedDirection = direction.normalized;
     
             // 根据激活的轴向限制移动
             Vector2 localPosition = new Vector2()
             {
-                x = (activatedAxis == Direction.Both || activatedAxis == Direction.Horizontal) ? (direction.normalized * radius).x : 0 ,
-                y = (activatedAxis == Direction.Both || activatedAxis == Direction.Vertical) ? -(direction.normalized * radius).y : 0 //y这里需要取反FGUI默认的输入是从y轴向上的
+                x = (activatedAxis == Direction.Both || activatedAxis == Direction.Horizontal) ? 
+                        (normalizedDirection.x * radius) : 0,
+                y = (activatedAxis == Direction.Both || activatedAxis == Direction.Vertical) ? 
+                        (-normalizedDirection.y * radius) : 0 // FGUI的Y轴需要取反
             };
     
-            this.JoystickTransform.localPosition = this.originLocalPostion + new Vector3(localPosition.x, localPosition.y, 0);  // 更新摇杆位置
+            // 更新摇杆位置
+            this.JoystickTransform.localPosition = this.originLocalPostion + new Vector3(localPosition.x, localPosition.y, 0);
+    
+            // 关键修正：计算并发送正确的归一化向量（与UGUI示例一致）
+            Vector2 normalizedOutput = new Vector2(
+                (activatedAxis == Direction.Both || activatedAxis == Direction.Horizontal) ? 
+                        (localPosition.x / maxRadius) : 0,
+                (activatedAxis == Direction.Both || activatedAxis == Direction.Vertical) ? 
+                        (localPosition.y / maxRadius) : 0
+            );
         }
         
         private void OnTouchEnd(EventContext context)

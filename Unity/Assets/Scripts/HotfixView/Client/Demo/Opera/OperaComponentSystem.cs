@@ -55,14 +55,14 @@ namespace ET.Client
         private static void LateUpdate(this ET.Client.OperaComponent self)
         {
             //每帧把当前帧收集的操作发送给服务端，随后清除
-            // if (self.OperateInfos.Count == 0)
-            //     return;
-            // self.OperateInfosTemp.Clear();
-            // self.OperateInfosTemp.AddRange(self.OperateInfos);
-            // C2Room_Operation c2RoomOperation = C2Room_Operation.Create();
-            // c2RoomOperation.OperateInfos = self.OperateInfosTemp;
-            // self.Root().GetComponent<ClientSenderComponent>().Send(c2RoomOperation);
-            // self.OperateInfos.Clear();  
+             if (self.OperateInfos.Count == 0)
+                 return;
+             self.OperateInfosTemp.Clear();
+             self.OperateInfosTemp.AddRange(self.OperateInfos);
+             C2Room_Operation c2RoomOperation = C2Room_Operation.Create();
+             c2RoomOperation.OperateInfos = self.OperateInfosTemp;
+             self.Root().GetComponent<ClientSenderComponent>().Send(c2RoomOperation);
+             self.OperateInfos.Clear();  
         }
 
         private static async ETTask Test1(this OperaComponent self)
@@ -96,15 +96,7 @@ namespace ET.Client
             operateInfo.OperateType = (int)EOperateType.Move;
             operateInfo.InputType = (int)EInputType.KeyDown;
             operateInfo.Vec3 = new float3(v2.x, 0, v2.y);
-            if (self.OperateInfos != null)
-            {
-                self.OperateInfos.Add(operateInfo);
-            }
-            else
-            {
-                Log.Error($"OperateInfos is null");
-            }
-            
+            self.OperateInfos.Add(operateInfo);
         }
         
         public static void StopMove(this OperaComponent self)

@@ -1,4 +1,6 @@
-﻿namespace ET
+﻿using YooAsset;
+
+namespace ET
 {
     public static class Define
     {
@@ -11,6 +13,8 @@
         /// VS或Rider工程生成dll的所在目录, 使用HybridCLR打包时需要使用
         /// </summary>
         public const string BuildOutputDir = "Temp/Bin/Debug";
+        
+        public static EPlayMode PlayMode;
 
 #if DEBUG
         public static bool IsDebug = true;

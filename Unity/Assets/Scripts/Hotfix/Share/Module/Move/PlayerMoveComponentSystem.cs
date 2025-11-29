@@ -32,6 +32,7 @@ namespace ET
             speed = speed == 0 ? 3 : speed;
             float3 deltaPos = unit.Forward * speed / DefineCore.LogicFrame;
             unit.Position += deltaPos;
+            Log.Info($"move {unit.Id} {unit.Position}");
         }
         
         public static void StartMove(this PlayerMoveComponent self)
