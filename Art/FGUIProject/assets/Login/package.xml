@@ -5,6 +5,10 @@
     <component id="i0ha1" name="LoginButton.xml" path="/Component/" exported="true"/>
     <component id="i0ha2" name="SelectServerPanel.xml" path="/Panel/" exported="true"/>
     <component id="nubc3" name="ServerInfoButton.xml" path="/Component/" exported="true"/>
+    <image id="g5s04" name="BtnLogin.png" path="/res/" exported="true" atlas="alone_npot"/>
+    <image id="g5s05" name="LoginBg.png" path="/res/" exported="true" scale9grid="480,270,-93,-54" atlas="alone_npot"/>
+    <image id="g5s06" name="title.png" path="/res/" exported="true"/>
+    <image id="g5s07" name="输入框.png" path="/res/" exported="true"/>
   </resources>
   <publish name=""/>
 </packageDescription>
