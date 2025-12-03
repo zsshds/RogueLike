@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1920,1080">
+  <displayList>
+    <image id="n14_h3lu" name="n14" src="zijbi" fileName="res/RoinfoBG.png" xy="0,0"/>
+    <image id="n7_h3lu" name="n7" src="zijbh" fileName="res/CommonInfoBg.png" xy="254,139" size="628,879"/>
+    <component id="n5_h3lu" name="Btn_PreRole" src="h3lum" fileName="Component/NextRoleButton.xml" xy="80,839" size="173,171" aspect="true" controller="ArC,1"/>
+    <component id="n6_h3lu" name="Btn_BextRole" src="h3lum" fileName="Component/NextRoleButton.xml" xy="883,832" size="173,171" aspect="true"/>
+    <image id="n11_h3lu" name="n11" src="h3lun" fileName="res/InfoBG.png" pkg="5razy0t5" xy="918,147" size="940,675"/>
+    <component id="n13_h3lu" name="Btn_EnterGame" src="h3lu1" fileName="Component/CommonButton.xml" pkg="5razy0t5" xy="1187,853" size="525,153">
+      <Button title="进入游戏" titleColor="#e5c263" titleFontSize="60"/>
+    </component>
+    <image id="n15_h3lu" name="n15" src="zijbg" fileName="res/CommonBotton.png" pkg="5razy0t5" xy="101,12" size="372,111">
+      <relation target="n16_h3lu" sidePair="width-width,height-height"/>
+    </image>
+    <text id="n16_h3lu" name="Txt_ServeTitle" xy="179,29" size="218,79" fontSize="60" color="#ffffff" align="center" vAlign="middle" text="服务器1"/>
+  </displayList>
+</component>

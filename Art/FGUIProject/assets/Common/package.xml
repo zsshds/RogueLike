@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="5razy0t5">
+  <resources>
+    <image id="zijbg" name="CommonBotton.png" path="/res/" exported="true" scale="9grid" scale9grid="85,31,172,49"/>
+    <image id="h3lun" name="InfoBG.png" path="/res/" exported="true" scale="9grid" scale9grid="128,112,316,275"/>
+    <image id="h3lu0" name="CommonBtnBg.png" path="/res/" exported="true"/>
+    <component id="h3lu1" name="CommonButton.xml" path="/Component/" exported="true"/>
+  </resources>
+  <publish name=""/>
+</packageDescription>

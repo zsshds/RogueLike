@@ -5,7 +5,6 @@
     {
         protected override async ETTask Run(Scene scene, SceneChangeFinish args)
         {
-            //await UIHelper.Create(scene, UIType.UIHelp, UILayer.Mid);
             scene.Root().GetComponent<FUIComponent>().HidePanel<SelectServerPanel>();
             await scene.Root().GetComponent<FUIComponent>().ShowPanelAsync<MainPanel>();
             await ETTask.CompletedTask;

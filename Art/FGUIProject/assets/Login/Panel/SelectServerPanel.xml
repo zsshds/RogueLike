@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="1920,1080" remark="Main">
   <displayList>
-    <graph id="n2_i0ha" name="n2" xy="1,-1" size="1920,1080" type="rect" fillColor="#ff99ccff">
-      <relation target="" sidePair="width-width,height-height,center-center,middle-middle"/>
-    </graph>
-    <list id="n3_nubc" name="List_ServerBtn" xy="217,174" size="1488,732" layout="flow_hz" overflow="scroll" colGap="50" defaultItem="ui://9q0q76hcnubc3" align="center" vAlign="middle">
-      <relation target="" sidePair="center-center,middle-middle"/>
-      <item title="服务器1"/>
+    <image id="n4_zijb" name="n4" src="zijb9" fileName="res/serverListBg.png" xy="0,-1">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n5_zijb" name="n5" src="zijb8" fileName="res/listBg.png" xy="236,266" size="1447,633" aspect="true"/>
+    <list id="n3_nubc" name="List_ServerBtn" xy="281,305" size="1356,539" layout="flow_vt" overflow="scroll" margin="10,10,0,0" lineGap="20" defaultItem="ui://9q0q76hcnubc3">
+      <relation target="n5_zijb" sidePair="center-center,middle-middle"/>
       <item/>
       <item/>
     </list>

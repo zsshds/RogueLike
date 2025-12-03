@@ -4,23 +4,23 @@
     <image id="n11_g5s0" name="n11" src="g5s05" fileName="res/LoginBg.png" xy="0,0" size="1920,1080">
       <relation target="" sidePair="width-width,height-height,center-center,middle-middle"/>
     </image>
-    <image id="n12_g5s0" name="n12" src="g5s07" fileName="res/输入框.png" xy="589,443" size="759,173" aspect="true">
+    <image id="n12_g5s0" name="n12" src="g5s07" fileName="res/输入框.png" xy="589,433" size="759,173" aspect="true">
       <relation target="" sidePair="width-width,center-center,bottom-bottom"/>
     </image>
-    <text id="n1_i0ha" name="TxtIn_Account" xy="669,486" size="606,115" fontSize="60" color="#e5c263" vAlign="middle" autoSize="shrink" strokeColor="#e39320" shadowColor="#4e0402" shadowOffset="3,4" text="用户名：" input="true">
+    <text id="n1_i0ha" name="TxtIn_Account" xy="701,465" size="534,115" fontSize="60" color="#e5c263" vAlign="middle" autoSize="shrink" strokeColor="#e39320" shadowColor="#4e0402" shadowOffset="3,4" text="用户名：" input="true">
       <relation target="n12_g5s0" sidePair="width-width,height-height,center-center,middle-middle"/>
     </text>
-    <image id="n14_g5s0" name="n14" src="g5s07" fileName="res/输入框.png" xy="589,646" size="759,173" aspect="true">
+    <image id="n14_g5s0" name="n14" src="g5s07" fileName="res/输入框.png" xy="591,632" size="759,173" aspect="true">
       <relation target="" sidePair="width-width,center-center,bottom-bottom"/>
     </image>
-    <text id="n16_g5s0" name="TxtIn_Pasword" xy="669,685" size="612,118" fontSize="60" color="#e5c263" vAlign="middle" autoSize="shrink" strokeColor="#e39320" shadowColor="#4e0402" shadowOffset="3,4" text="密码：" input="true">
+    <text id="n16_g5s0" name="TxtIn_Pasword" xy="705,666" size="531,118" fontSize="60" color="#e5c263" vAlign="middle" autoSize="shrink" strokeColor="#e39320" shadowColor="#4e0402" shadowOffset="3,4" text="密码：" input="true">
       <relation target="n14_g5s0" sidePair="width-width,height-height,center-center,middle-middle"/>
     </text>
-    <component id="n10_i0ha" name="Btn_Login" src="i0ha1" fileName="Component/LoginButton.xml" xy="717,882" size="490,120">
+    <component id="n10_i0ha" name="Btn_Login" src="i0ha1" fileName="Component/LoginButton.xml" xy="717,885" size="490,120">
       <relation target="" sidePair="center-center,bottom-bottom"/>
       <Button title="登录" titleFontSize="60"/>
     </component>
-    <image id="n15_g5s0" name="n15" src="g5s06" fileName="res/title.png" xy="154,96">
+    <image id="n15_g5s0" name="n15" src="g5s06" fileName="res/title.png" xy="234,60" size="1450,330" aspect="true">
       <relation target="" sidePair="center-center,top-top"/>
     </image>
   </displayList>
