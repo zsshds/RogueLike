@@ -327,6 +327,13 @@ message RoleInfoProto
 	int64 LastLoginTime = 5;
 	int64 CreateTime = 6;
 	int32 ServerId = 7;
+	int32 HeroId = 8;
+	repeated NumericProto = 9;
+}
+
+message NumericProto
+{
+	map<int32, int64> KV = 1;
 }
 
 // ResponseType R2C_GetRoles
@@ -354,6 +361,7 @@ message C2R_CreateRole // ISessionRequest
 	string Account = 3;
 	string Name = 4;
 	int32 ServerId = 5;
+	int32 HeroId = 6;
 }
 
 message R2C_CreatRole // ISessionResponse

@@ -10,6 +10,7 @@ namespace ET.Client
     {
         private readonly Dictionary<string, string> m_PackageIdToNameMap = new()
         {
+            {"5razy0t5", "Common"},
             {"9q0q76hc", "Login"},
             {"ngzx0fqy", "Main"},
             // <last line>

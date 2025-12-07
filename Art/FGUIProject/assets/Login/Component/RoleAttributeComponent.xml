@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="240,40" remark="Main">
+  <displayList>
+    <text id="n0_bxuq" name="Txt_AttributeName" xy="0,0" size="122,41" fontSize="30" color="#ffffff" text="属性名："/>
+    <text id="n1_bxuq" name="Txt_AttributeValue" xy="122,0" size="116,42" fontSize="30" color="#ffffff" autoSize="none" text="230"/>
+  </displayList>
+</component>

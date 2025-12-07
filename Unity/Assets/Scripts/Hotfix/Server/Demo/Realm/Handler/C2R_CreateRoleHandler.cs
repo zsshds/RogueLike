@@ -52,6 +52,7 @@ namespace ET.Server
                     newRoleInfo.State = (int)RoleIndoState.Normal;
                     newRoleInfo.CreateTime = TimeInfo.Instance.ServerNow();
                     newRoleInfo.lastLoginTime = 0;
+                    newRoleInfo.HeroId = request.HeroId;
                     await dbComponent.Save<RoleInfo>(newRoleInfo);
                     //返回数据
                     response.roleInfo = newRoleInfo.ToMessage();

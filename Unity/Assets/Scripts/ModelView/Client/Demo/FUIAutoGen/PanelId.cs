@@ -7,6 +7,11 @@ namespace ET.Client
         Invalid = 0,
         LoginPanel,
         SelectServerPanel,
+        RoleListPanel,
+        RoleInfoComponent,
+        RoleSelectPanel,
+        RoleImgComponent,
+        RoleAttributeComponent,
         MainPanel,
         // <last line>
     }

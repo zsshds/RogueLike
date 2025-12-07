@@ -11,18 +11,19 @@
     <image id="g5s07" name="输入框.png" path="/res/" exported="true"/>
     <image id="zijb8" name="listBg.png" path="/res/" exported="true"/>
     <image id="zijb9" name="serverListBg.png" path="/res/" exported="true"/>
-    <image id="zijba" name="黑半透明块.png" path="/res/" exported="true" scale="tile" scale9grid="1,1,2,2"/>
     <image id="zijbb" name="多人.png" path="/res/" exported="true"/>
     <image id="zijbc" name="流程.png" path="/res/" exported="true"/>
     <image id="zijbd" name="拥塞.png" path="/res/" exported="true"/>
-    <component id="zijbf" name="RoleSelectPanel.xml" path="/Panel/" exported="true"/>
+    <component id="zijbf" name="RoleListPanel.xml" path="/Panel/" exported="true"/>
     <image id="zijbh" name="CommonInfoBg.png" path="/res/" exported="true" scale="9grid" scale9grid="64,38,115,13"/>
-    <image id="zijbi" name="RoinfoBG.png" path="/res/" exported="true"/>
-    <image id="zijbj" name="RoleInfoBG.png" path="/res/" exported="true" scale="9grid" scale9grid="221,186,551,272"/>
     <component id="zijbk" name="RoleInfoComponent.xml" path="/Component/" exported="true"/>
     <image id="zijbl" name="ArPre.png" path="/res/" exported="true"/>
     <component id="h3lum" name="NextRoleButton.xml" path="/Component/" exported="true"/>
     <image id="h3luo" name="ArNext.png" path="/res/" exported="true"/>
+    <component id="bxuqp" name="RoleSelectPanel.xml" path="/Panel/" exported="true"/>
+    <image id="bxuqt" name="RoleSelectBg.png" path="/res/" exported="true"/>
+    <component id="bxuqu" name="RoleImgComponent.xml" path="/Component/" exported="true"/>
+    <component id="bxuqv" name="RoleAttributeComponent.xml" path="/Component/" exported="true"/>
   </resources>
   <publish name=""/>
 </packageDescription>

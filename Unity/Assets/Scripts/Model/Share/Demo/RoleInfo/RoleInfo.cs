@@ -3,7 +3,6 @@
     public enum RoleIndoState
     {
         Normal = 0,
-        
         Freeze = 100,
         Delete = 999,
     }
@@ -17,5 +16,6 @@
         public string Account;
         public long lastLoginTime;
         public long CreateTime;
+        public int HeroId;
     }
 }

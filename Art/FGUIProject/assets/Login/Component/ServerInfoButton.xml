@@ -2,7 +2,7 @@
 <component size="1356,150" extention="Button" remark="Main">
   <controller name="HasRole" pages="0,Yes,1,No" selected="0"/>
   <displayList>
-    <image id="n6_zijb" name="n6" src="zijba" fileName="res/黑半透明块.png" xy="0,0" size="1356,150"/>
+    <image id="n6_zijb" name="n6" src="zijba" fileName="res/黑半透明块.png" xy="0,0" size="1356,150" pkg="5razy0t5"/>
     <text id="n3_nubc" name="Txt_Title" xy="70,0" size="908,150" fontSize="60" color="#ffffff" vAlign="middle" autoSize="none" singleLine="true" text="服务器">
       <relation target="" sidePair="middle-middle,left-left"/>
     </text>

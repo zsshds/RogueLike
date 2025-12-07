@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="150,148" extention="Button">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>
+  <displayList>
+    <image id="n1_a16c" name="n1" src="bxuqr" fileName="res/CommonPopBg.png" xy="1,0" size="149,148">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n0_a16c" name="n0" src="bxuqs" fileName="res/commonX.png" xy="14,12" size="120,119" aspect="true">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+  </displayList>
+  <Button/>
+</component>

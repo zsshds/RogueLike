@@ -1,4 +1,6 @@
-﻿namespace ET.Client
+﻿using System.Collections.Generic;
+
+namespace ET.Client
 {
     public struct SceneChangeStart
     {
@@ -36,6 +38,21 @@
     public struct AfterMyUnitCreate
     {
         public Unit Unit;
+    }
+
+    public struct LoginAndGetServerInfoFinish
+    {
+        
+    }
+
+    public struct EnterServerNotHaveRoles
+    {
+        
+    }
+    
+    public struct EnterServerHaveRoles
+    {
+        public List<RoleInfoProto> RoleInfos;
     }
     
 }

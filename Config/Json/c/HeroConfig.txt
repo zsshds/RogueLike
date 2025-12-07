@@ -1,0 +1,7 @@
+{"dict": [
+[1001, {"_t":"HeroConfig","_id":1001,"Type":1,"Name":"孙悟空","Desc":"孙悟空","BaseSpeed":5,"BaseHP":500,"BaseAttack":20}],
+[1002, {"_t":"HeroConfig","_id":1002,"Type":1,"Name":"猪悟能","Desc":"猪悟能","BaseSpeed":4.3,"BaseHP":1000,"BaseAttack":10}],
+[1003, {"_t":"HeroConfig","_id":1003,"Type":1,"Name":"沙悟净","Desc":"沙悟净","BaseSpeed":4.3,"BaseHP":500,"BaseAttack":15}],
+[1004, {"_t":"HeroConfig","_id":1004,"Type":1,"Name":"唐三藏","Desc":"唐三藏","BaseSpeed":3.5,"BaseHP":400,"BaseAttack":20}],
+[1005, {"_t":"HeroConfig","_id":1005,"Type":2,"Name":"白龙马","Desc":"白龙马","BaseSpeed":5,"BaseHP":500,"BaseAttack":20}],
+]}

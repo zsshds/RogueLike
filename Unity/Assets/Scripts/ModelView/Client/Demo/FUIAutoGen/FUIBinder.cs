@@ -10,6 +10,7 @@ namespace ET.Client
         {
             UIObjectFactory.Clear();
             
+            CommonBinder.BindAll();
             LoginBinder.BindAll();
             MainBinder.BindAll();
             // <last line>

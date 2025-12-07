@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1920,1080" remark="Main">
+  <displayList>
+    <image id="n22_a16c" name="n22" src="zijbh" fileName="res/CommonInfoBg.png" xy="-3,-16" size="1931,1115"/>
+    <component id="n13_h3lu" name="Btn_EnterGame" src="h3lu1" fileName="Component/CommonButton.xml" pkg="5razy0t5" xy="1318,888" size="333,109">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+      <Button title="进入游戏" titleColor="#e5c263" titleFontSize="50"/>
+    </component>
+    <image id="n15_h3lu" name="n15" src="zijbg" fileName="res/CommonBotton.png" pkg="5razy0t5" xy="101,12" size="372,111">
+      <relation target="n16_h3lu" sidePair="width-width,height-height"/>
+      <relation target="" sidePair="left-left"/>
+    </image>
+    <text id="n16_h3lu" name="Txt_ServeTitle" xy="179,29" size="218,79" fontSize="60" color="#ffffff" align="center" vAlign="middle" text="服务器1">
+      <relation target="" sidePair="left-left"/>
+    </text>
+    <component id="n18_a16c" name="n18" src="zijbk" fileName="Component/RoleInfoComponent.xml" xy="883,151" size="800,714">
+      <relation target="" sidePair="center-center"/>
+    </component>
+    <component id="n19_a16c" name="n19" src="bxuqu" fileName="Component/RoleImgComponent.xml" xy="184,182" size="615,839">
+      <relation target="" sidePair="center-center"/>
+    </component>
+    <component id="n21_a16c" name="Btn_CreateNewRole" src="h3lu1" fileName="Component/CommonButton.xml" pkg="5razy0t5" xy="908,887" size="333,109">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+      <Button title="新建角色" titleColor="#e5c263" titleFontSize="50"/>
+    </component>
+    <component id="n23_a16c" name="n23" src="a16cw" fileName="Component/BreakButton.xml" pkg="5razy0t5" xy="1733,43" size="106,106">
+      <relation target="" sidePair="right-right"/>
+    </component>
+  </displayList>
+</component>
