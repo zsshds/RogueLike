@@ -69,12 +69,8 @@ namespace ET
 		public string Desc { get; set; }
 		/// <summary>Icon</summary>
 		public string Icon { get; set; }
-		/// <summary>基础速度</summary>
-		public float BaseSpeed { get; set; }
-		/// <summary>基础生命</summary>
-		public float BaseHP { get; set; }
-		/// <summary>基础攻击力</summary>
-		public float BaseAttack { get; set; }
+		/// <summary>AttributeDict</summary>
+		public Dictionary<int, long> AttributeDict { get; set; }
 
 	}
 }

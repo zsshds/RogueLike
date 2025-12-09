@@ -551,6 +551,12 @@ namespace ET
 
         private static string Convert(string type, string value)
         {
+            // 字典解析
+            if (type.StartsWith("Dictionary<"))
+            {
+                return ConvertDictionary(type, value);
+            }
+
             switch (type)
             {
                 case "uint[]":
@@ -580,6 +586,80 @@ namespace ET
                     return $"\"{value}\"";
                 default:
                     throw new Exception($"不支持此类型: {type}");
+            }
+        }
+        
+        private static string ConvertDictionary(string type, string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return "{}";
+
+            // 解析 Dictionary<TKey, TValue>
+            int start = type.IndexOf("<") + 1;
+            int end = type.LastIndexOf(">");
+            string inner = type.Substring(start, end - start);
+
+            string[] parts = inner.Split(',');
+            if (parts.Length != 2)
+                throw new Exception($"字典类型格式错误: {type}");
+
+            string keyType = parts[0].Trim();
+            string valueType = parts[1].Trim();
+
+            string[] pairs = value.Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{");
+
+            for (int i = 0; i < pairs.Length; ++i)
+            {
+                string[] kv = pairs[i].Split(':', 2);
+                if (kv.Length != 2)
+                    throw new Exception($"字典项格式错误: '{pairs[i]}'");
+
+                string k = ConvertSingleValue(keyType, kv[0].Trim());
+                string v = ConvertSingleValue(valueType, kv[1].Trim());
+
+                sb.Append($"{k}:{v}");
+                if (i < pairs.Length - 1)
+                    sb.Append(",");
+            }
+
+            sb.Append("}");
+            return sb.ToString();
+        }
+        private static string ConvertSingleValue(string type, string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                if (type == "string")
+                    return "\"\"";
+                return "0";
+            }
+
+            switch (type)
+            {
+                case "int":
+                case "uint":
+                case "short":
+                case "ushort":
+                case "long":
+                case "ulong":
+                case "float":
+                case "double":
+                case "bool":
+                    return value;
+
+                case "string":
+                    value = value.Replace("\\", "\\\\").Replace("\"", "\\\"");
+                    return $"\"{value}\"";
+
+                default:
+                    // 支持自定义对象：{a:1,b:2}
+                    if (value.StartsWith("{") && value.EndsWith("}"))
+                        return value;
+
+                    throw new Exception($"不支持的类型 '{type}'，值：'{value}'");
             }
         }
 

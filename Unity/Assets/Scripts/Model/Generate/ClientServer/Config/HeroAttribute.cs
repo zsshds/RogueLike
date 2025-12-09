@@ -7,28 +7,28 @@ using System.ComponentModel;
 namespace ET
 {
     [Config]
-    public partial class HeroConfigCategory : Singleton<HeroConfigCategory>, IMerge
+    public partial class HeroAttributeCategory : Singleton<HeroAttributeCategory>, IMerge
     {
         [BsonElement]
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
-        private Dictionary<int, HeroConfig> dict = new();
+        private Dictionary<int, HeroAttribute> dict = new();
 		
         public void Merge(object o)
         {
-            HeroConfigCategory s = o as HeroConfigCategory;
+            HeroAttributeCategory s = o as HeroAttributeCategory;
             foreach (var kv in s.dict)
             {
                 this.dict.Add(kv.Key, kv.Value);
             }
         }
 		
-        public HeroConfig Get(int id)
+        public HeroAttribute Get(int id)
         {
-            this.dict.TryGetValue(id, out HeroConfig item);
+            this.dict.TryGetValue(id, out HeroAttribute item);
 
             if (item == null)
             {
-                throw new Exception($"配置找不到，配置表名: {nameof (HeroConfig)}，配置id: {id}");
+                throw new Exception($"配置找不到，配置表名: {nameof (HeroAttribute)}，配置id: {id}");
             }
 
             return item;
@@ -39,12 +39,12 @@ namespace ET
             return this.dict.ContainsKey(id);
         }
 
-        public Dictionary<int, HeroConfig> GetAll()
+        public Dictionary<int, HeroAttribute> GetAll()
         {
             return this.dict;
         }
 
-        public HeroConfig GetOne()
+        public HeroAttribute GetOne()
         {
             if (this.dict == null || this.dict.Count <= 0)
             {
@@ -57,20 +57,12 @@ namespace ET
         }
     }
 
-	public partial class HeroConfig: ProtoObject, IConfig
+	public partial class HeroAttribute: ProtoObject, IConfig
 	{
 		/// <summary>Id</summary>
 		public int Id { get; set; }
-		/// <summary>Type</summary>
-		public int Type { get; set; }
-		/// <summary>名字</summary>
-		public string Name { get; set; }
-		/// <summary>描述</summary>
-		public string Desc { get; set; }
-		/// <summary>Icon</summary>
-		public string Icon { get; set; }
-		/// <summary>AttributeDict</summary>
-		public Dictionary<int, long> AttributeDict { get; set; }
+		/// <summary>属性名</summary>
+		public string AttributeName { get; set; }
 
 	}
 }
