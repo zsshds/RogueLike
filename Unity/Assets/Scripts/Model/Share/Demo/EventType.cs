@@ -54,5 +54,14 @@ namespace ET.Client
     {
         public List<RoleInfoProto> RoleInfos;
     }
+
+    public struct OnClickNextRole
+    {
+        
+    }
     
+    public struct OnClickPreRole
+    {
+        
+    }
 }

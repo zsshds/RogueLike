@@ -2,12 +2,17 @@
 <component size="1920,1080" remark="Main">
   <displayList>
     <image id="n9_a16c" name="n9" src="zijbh" fileName="res/CommonInfoBg.png" xy="-12,-16" size="1945,1118"/>
-    <component id="n4_bxuq" name="RoleImgComponent" src="bxuqu" fileName="Component/RoleImgComponent.xml" xy="145,88"/>
     <component id="n6_bxuq" name="RoleInfoComponent" src="zijbk" fileName="Component/RoleInfoComponent.xml" xy="751,150" size="981,652"/>
     <component id="n7_a16c" name="Btn_Back" src="a16cw" fileName="Component/BreakButton.xml" pkg="5razy0t5" xy="1746,40" size="111,110" aspect="true"/>
     <component id="n8_a16c" name="Btn_CreateNewRole" src="h3lu1" fileName="Component/CommonButton.xml" pkg="5razy0t5" xy="1058,850" size="333,109">
       <relation target="" sidePair="center-center,bottom-bottom"/>
       <Button title="新建角色" titleColor="#e5c263" titleFontSize="50"/>
     </component>
+    <text id="n10_lh2m" name="Txt_RoleNumber" xy="193,125" size="480,48" group="n11_lh2m" fontSize="35" color="#ffffff" align="center" vAlign="middle" autoSize="shrink" text="当前1/4">
+      <relation target="" sidePair=""/>
+      <relation target="n4_bxuq" sidePair=""/>
+    </text>
+    <component id="n4_bxuq" name="RoleImgComponent" src="bxuqu" fileName="Component/RoleImgComponent.xml" xy="146,170" group="n11_lh2m"/>
+    <group id="n11_lh2m" name="n11" xy="146,125" size="577,814"/>
   </displayList>
 </component>

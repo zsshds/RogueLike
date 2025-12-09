@@ -67,6 +67,8 @@ namespace ET
 		public string Name { get; set; }
 		/// <summary>描述</summary>
 		public string Desc { get; set; }
+		/// <summary>Icon</summary>
+		public string Icon { get; set; }
 		/// <summary>基础速度</summary>
 		public float BaseSpeed { get; set; }
 		/// <summary>基础生命</summary>

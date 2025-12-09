@@ -8,10 +8,7 @@ namespace ET.Client
         LoginPanel,
         SelectServerPanel,
         RoleListPanel,
-        RoleInfoComponent,
         RoleSelectPanel,
-        RoleImgComponent,
-        RoleAttributeComponent,
         MainPanel,
         // <last line>
     }

@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="577,808" remark="Main">
+<component size="577,769">
   <displayList>
-    <image id="n0_bxuq" name="n0" src="bxuqt" fileName="res/RoleSelectBg.png" xy="48,42" size="482,768" group="n4_bxuq">
-      <relation target="" sidePair="width-width,height-height,center-center,middle-middle"/>
-    </image>
-    <loader id="n1_bxuq" name="Img_Role" xy="154,149" size="271,591" group="n4_bxuq">
-      <relation target="n0_bxuq" sidePair="width-width,height-height,center-center,middle-middle"/>
+    <loader id="n1_bxuq" name="Img_Role" xy="154,106" size="271,591" group="n4_bxuq" url="ui://v5ye6f0blh2m0">
+      <relation target="n0_bxuq" sidePair="width-width,center-center,middle-middle"/>
     </loader>
-    <group id="n4_bxuq" name="n4" xy="48,42" size="482,768"/>
-    <component id="n2_bxuq" name="Btn_NextRole" src="h3lum" fileName="Component/NextRoleButton.xml" xy="443,367" size="134,132" aspect="true">
+    <image id="n0_bxuq" name="n0" src="bxuqt" fileName="res/RoleSelectBg.png" xy="48,0" size="482,768" group="n4_bxuq">
+      <relation target="" sidePair="width-width,center-center,middle-middle"/>
+    </image>
+    <group id="n4_bxuq" name="n4" xy="48,0" size="482,768"/>
+    <component id="n2_bxuq" name="Btn_NextRole" src="h3lum" fileName="Component/NextRoleButton.xml" xy="443,324" size="134,132" aspect="true">
       <relation target="" sidePair="middle-middle,right-right"/>
     </component>
-    <component id="n3_bxuq" name="Btn_PreRole" src="h3lum" fileName="Component/NextRoleButton.xml" xy="0,367" size="134,132" aspect="true" controller="ArC,1">
+    <component id="n3_bxuq" name="Btn_PreRole" src="h3lum" fileName="Component/NextRoleButton.xml" xy="0,324" size="134,132" aspect="true" controller="ArC,1">
       <relation target="" sidePair="middle-middle,left-left"/>
     </component>
-    <text id="n7_a16c" name="Txt_RoleNumber" xy="0,3" size="577,48" fontSize="35" color="#ffffff" align="center" vAlign="middle" autoSize="shrink" text="当前1/4">
-      <relation target="" sidePair="width-width"/>
-    </text>
   </displayList>
 </component>

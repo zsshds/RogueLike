@@ -9,7 +9,9 @@ namespace ET.Client
     {
         private FUI_RoleSelectPanel _fuiRoleSelectPanel;
         
-        //public List<EntityRef<RoleInfo>> RoleList = new List<EntityRef<RoleInfo>>();
+        public List<HeroConfig> HeroConfigs;
+        
+        public int SelectIndex;
 
         public FUI_RoleSelectPanel FUIRoleSelectPanel
         {

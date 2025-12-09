@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="v5ye6f0b">
+  <resources>
+    <image id="lh2m0" name="Hero_1005.png" path="/Res/" exported="true"/>
+    <image id="lh2m1" name="Hero_1003.png" path="/Res/" exported="true"/>
+    <image id="lh2m2" name="Hero_1001.png" path="/Res/" exported="true"/>
+    <image id="lh2m3" name="Hero_1004.png" path="/Res/" exported="true"/>
+    <image id="lh2m4" name="Hero_1002.png" path="/Res/" exported="true"/>
+  </resources>
+  <publish name=""/>
+</packageDescription>
