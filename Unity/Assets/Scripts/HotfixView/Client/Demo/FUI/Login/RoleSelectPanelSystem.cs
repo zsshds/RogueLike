@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace ET.Client
 {
 
@@ -30,7 +32,7 @@ namespace ET.Client
         [EntitySystem]
         private static void Awake(this RoleSelectPanel self)
         {
-            self.HeroConfigs = HeroConfigCategory.Instance.GetAllHeroConfig();
+            self.HeroConfigs = new List<HeroConfig>(HeroConfigCategory.Instance.GetAll().Values);
             self.SelectIndex = 0;
         }
 
@@ -38,8 +40,10 @@ namespace ET.Client
         private static void Show(this RoleSelectPanel self)
         {
             self.FUIRoleSelectPanel.RoleImgComponent.Init(self.HeroConfigs[self.SelectIndex], self.Scene());
+            self.FUIRoleSelectPanel.RoleInfoComponent.Init(self.HeroConfigs[self.SelectIndex]);
         }
         
+        //点击切换到下一个英雄
         public static void OnClickNextRole(this RoleSelectPanel self)
         {
             self.SelectIndex++;
@@ -48,7 +52,10 @@ namespace ET.Client
                 self.SelectIndex = 0;
             }
             self.FUIRoleSelectPanel.RoleImgComponent.Init(self.HeroConfigs[self.SelectIndex], self.Scene());
+            self.FUIRoleSelectPanel.RoleInfoComponent.Init(self.HeroConfigs[self.SelectIndex]);
         }
+        
+        //点击切换到上一个英雄
         public static void OnClickPreRole(this RoleSelectPanel self)
         {
             self.SelectIndex--;
@@ -57,6 +64,7 @@ namespace ET.Client
                 self.SelectIndex = self.HeroConfigs.Count - 1;
             }
             self.FUIRoleSelectPanel.RoleImgComponent.Init(self.HeroConfigs[self.SelectIndex], self.Scene());
+            self.FUIRoleSelectPanel.RoleInfoComponent.Init(self.HeroConfigs[self.SelectIndex]);
         }
     }
 }

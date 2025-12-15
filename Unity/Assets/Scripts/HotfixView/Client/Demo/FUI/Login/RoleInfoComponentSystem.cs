@@ -1,4 +1,5 @@
-﻿using ET.Client.Login;
+﻿using System.Collections.Generic;
+using ET.Client.Login;
 
 namespace ET.Client
 {
@@ -9,7 +10,15 @@ namespace ET.Client
         {
             self.Txt_RoleName.text = heroConfig.Name;
             self.Txt_RoleDIcx.text = heroConfig.Desc;
-            
+            List<int> keys = new List<int>(heroConfig.AttributeDict.Keys);
+            self.RoleAttributeList.itemRenderer = (index, obj) =>
+            { 
+                FUI_RoleAttributeComponent roleAttributeComponent = obj as FUI_RoleAttributeComponent;
+                int key = keys[index];
+                roleAttributeComponent.Txt_AttributeName.text = HeroAttributeCategory.Instance.Get(key).AttributeName;
+                roleAttributeComponent.Txt_AttributeValue.text = (heroConfig.AttributeDict[key] / 10000).ToString();
+            };
+            self.RoleAttributeList.numItems = heroConfig.AttributeDict.Count;
         }
     }
 

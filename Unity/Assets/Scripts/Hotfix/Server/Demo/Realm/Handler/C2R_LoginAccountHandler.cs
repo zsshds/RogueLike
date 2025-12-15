@@ -58,6 +58,14 @@ namespace ET.Server
                             return;
                         }
 
+                        if (curAccount.AccountType == AccountType.Admin)
+                        {
+                            response.Error = ErrorCode.ERR_AdminAccountNotAllowed;
+                            session.Disconnect().Coroutine();
+                            curAccount.Dispose();
+                            return;
+                        }
+
                         if (curAccount.Password != request.Password)
                         {
                             response.Error = ErrorCode.ERR_LoginPasswordError;

@@ -7,6 +7,7 @@ namespace ET.Model.Server
     {
         General = 0,
         BlackList = 1,
+        Admin = 2,
     }
     
     [ChildOf(typeof(Session))]

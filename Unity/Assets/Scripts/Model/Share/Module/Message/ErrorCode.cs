@@ -29,5 +29,6 @@ namespace ET
         public const int ERR_NonePlayerError = 200014;
         public const int ERR_EnterGameError = 200015;
         public const int ERR_ReEnterGameError = 200016;
+        public const int ERR_AdminAccountNotAllowed = 200017;
     }
 }
