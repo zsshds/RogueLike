@@ -1,64 +1,51 @@
 using System;
 using System.Collections.Generic;
 using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson.Serialization.Options;
-using System.ComponentModel;
 
 namespace ET
 {
     [Config]
-    public partial class StartProcessConfigCategory : Singleton<StartProcessConfigCategory>, IMerge
+    public partial class StartProcessConfigCategory 
+        : Singleton<StartProcessConfigCategory>, ISingletonAwake
     {
-        [BsonElement]
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
+        [BsonElement("list")]
+        private List<StartProcessConfig> list = new();
+
+        [BsonIgnore]
         private Dictionary<int, StartProcessConfig> dict = new();
-		
-        public void Merge(object o)
+
+        public void Awake()
         {
-            StartProcessConfigCategory s = o as StartProcessConfigCategory;
-            foreach (var kv in s.dict)
+            this.dict.Clear();
+            foreach (StartProcessConfig item in this.list)
             {
-                this.dict.Add(kv.Key, kv.Value);
+                this.dict[item.Id] = item;
             }
         }
-		
+
         public StartProcessConfig Get(int id)
         {
-            this.dict.TryGetValue(id, out StartProcessConfig item);
-
-            if (item == null)
+            if (!this.dict.TryGetValue(id, out StartProcessConfig item))
             {
-                throw new Exception($"配置找不到，配置表名: {nameof (StartProcessConfig)}，配置id: {id}");
+                throw new Exception(
+                    "配置不存在: StartProcessConfig id=" + id);
             }
-
             return item;
         }
-		
+
         public bool Contain(int id)
         {
             return this.dict.ContainsKey(id);
         }
 
-        public Dictionary<int, StartProcessConfig> GetAll()
+        public IReadOnlyDictionary<int, StartProcessConfig> GetAll()
         {
             return this.dict;
         }
-
-        public StartProcessConfig GetOne()
-        {
-            if (this.dict == null || this.dict.Count <= 0)
-            {
-                return null;
-            }
-            
-            var enumerator = this.dict.Values.GetEnumerator();
-            enumerator.MoveNext();
-            return enumerator.Current; 
-        }
     }
 
-	public partial class StartProcessConfig: ProtoObject, IConfig
-	{
+    public partial class StartProcessConfig
+    {
 		/// <summary>Id</summary>
 		public int Id { get; set; }
 		/// <summary>所属机器</summary>
@@ -66,5 +53,5 @@ namespace ET
 		/// <summary>外网端口</summary>
 		public int Port { get; set; }
 
-	}
+    }
 }

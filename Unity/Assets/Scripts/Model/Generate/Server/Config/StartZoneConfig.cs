@@ -1,64 +1,51 @@
 using System;
 using System.Collections.Generic;
 using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson.Serialization.Options;
-using System.ComponentModel;
 
 namespace ET
 {
     [Config]
-    public partial class StartZoneConfigCategory : Singleton<StartZoneConfigCategory>, IMerge
+    public partial class StartZoneConfigCategory 
+        : Singleton<StartZoneConfigCategory>, ISingletonAwake
     {
-        [BsonElement]
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
+        [BsonElement("list")]
+        private List<StartZoneConfig> list = new();
+
+        [BsonIgnore]
         private Dictionary<int, StartZoneConfig> dict = new();
-		
-        public void Merge(object o)
+
+        public void Awake()
         {
-            StartZoneConfigCategory s = o as StartZoneConfigCategory;
-            foreach (var kv in s.dict)
+            this.dict.Clear();
+            foreach (StartZoneConfig item in this.list)
             {
-                this.dict.Add(kv.Key, kv.Value);
+                this.dict[item.Id] = item;
             }
         }
-		
+
         public StartZoneConfig Get(int id)
         {
-            this.dict.TryGetValue(id, out StartZoneConfig item);
-
-            if (item == null)
+            if (!this.dict.TryGetValue(id, out StartZoneConfig item))
             {
-                throw new Exception($"配置找不到，配置表名: {nameof (StartZoneConfig)}，配置id: {id}");
+                throw new Exception(
+                    "配置不存在: StartZoneConfig id=" + id);
             }
-
             return item;
         }
-		
+
         public bool Contain(int id)
         {
             return this.dict.ContainsKey(id);
         }
 
-        public Dictionary<int, StartZoneConfig> GetAll()
+        public IReadOnlyDictionary<int, StartZoneConfig> GetAll()
         {
             return this.dict;
         }
-
-        public StartZoneConfig GetOne()
-        {
-            if (this.dict == null || this.dict.Count <= 0)
-            {
-                return null;
-            }
-            
-            var enumerator = this.dict.Values.GetEnumerator();
-            enumerator.MoveNext();
-            return enumerator.Current; 
-        }
     }
 
-	public partial class StartZoneConfig: ProtoObject, IConfig
-	{
+    public partial class StartZoneConfig
+    {
 		/// <summary>Id</summary>
 		public int Id { get; set; }
 		/// <summary>数据库地址</summary>
@@ -70,5 +57,5 @@ namespace ET
 		/// <summary>区服名称</summary>
 		public string ZoneName { get; set; }
 
-	}
+    }
 }

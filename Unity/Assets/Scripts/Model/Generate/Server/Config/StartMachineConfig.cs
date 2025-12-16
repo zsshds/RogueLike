@@ -1,64 +1,51 @@
 using System;
 using System.Collections.Generic;
 using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson.Serialization.Options;
-using System.ComponentModel;
 
 namespace ET
 {
     [Config]
-    public partial class StartMachineConfigCategory : Singleton<StartMachineConfigCategory>, IMerge
+    public partial class StartMachineConfigCategory 
+        : Singleton<StartMachineConfigCategory>, ISingletonAwake
     {
-        [BsonElement]
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
+        [BsonElement("list")]
+        private List<StartMachineConfig> list = new();
+
+        [BsonIgnore]
         private Dictionary<int, StartMachineConfig> dict = new();
-		
-        public void Merge(object o)
+
+        public void Awake()
         {
-            StartMachineConfigCategory s = o as StartMachineConfigCategory;
-            foreach (var kv in s.dict)
+            this.dict.Clear();
+            foreach (StartMachineConfig item in this.list)
             {
-                this.dict.Add(kv.Key, kv.Value);
+                this.dict[item.Id] = item;
             }
         }
-		
+
         public StartMachineConfig Get(int id)
         {
-            this.dict.TryGetValue(id, out StartMachineConfig item);
-
-            if (item == null)
+            if (!this.dict.TryGetValue(id, out StartMachineConfig item))
             {
-                throw new Exception($"配置找不到，配置表名: {nameof (StartMachineConfig)}，配置id: {id}");
+                throw new Exception(
+                    "配置不存在: StartMachineConfig id=" + id);
             }
-
             return item;
         }
-		
+
         public bool Contain(int id)
         {
             return this.dict.ContainsKey(id);
         }
 
-        public Dictionary<int, StartMachineConfig> GetAll()
+        public IReadOnlyDictionary<int, StartMachineConfig> GetAll()
         {
             return this.dict;
         }
-
-        public StartMachineConfig GetOne()
-        {
-            if (this.dict == null || this.dict.Count <= 0)
-            {
-                return null;
-            }
-            
-            var enumerator = this.dict.Values.GetEnumerator();
-            enumerator.MoveNext();
-            return enumerator.Current; 
-        }
     }
 
-	public partial class StartMachineConfig: ProtoObject, IConfig
-	{
+    public partial class StartMachineConfig
+    {
 		/// <summary>Id</summary>
 		public int Id { get; set; }
 		/// <summary>内网地址</summary>
@@ -68,5 +55,5 @@ namespace ET
 		/// <summary>守护进程端口</summary>
 		public string WatcherPort { get; set; }
 
-	}
+    }
 }

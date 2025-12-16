@@ -1,64 +1,51 @@
 using System;
 using System.Collections.Generic;
 using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson.Serialization.Options;
-using System.ComponentModel;
 
 namespace ET
 {
     [Config]
-    public partial class AIConfigCategory : Singleton<AIConfigCategory>, IMerge
+    public partial class AIConfigCategory 
+        : Singleton<AIConfigCategory>, ISingletonAwake
     {
-        [BsonElement]
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
+        [BsonElement("list")]
+        private List<AIConfig> list = new();
+
+        [BsonIgnore]
         private Dictionary<int, AIConfig> dict = new();
-		
-        public void Merge(object o)
+
+        public void Awake()
         {
-            AIConfigCategory s = o as AIConfigCategory;
-            foreach (var kv in s.dict)
+            this.dict.Clear();
+            foreach (AIConfig item in this.list)
             {
-                this.dict.Add(kv.Key, kv.Value);
+                this.dict[item.Id] = item;
             }
         }
-		
+
         public AIConfig Get(int id)
         {
-            this.dict.TryGetValue(id, out AIConfig item);
-
-            if (item == null)
+            if (!this.dict.TryGetValue(id, out AIConfig item))
             {
-                throw new Exception($"配置找不到，配置表名: {nameof (AIConfig)}，配置id: {id}");
+                throw new Exception(
+                    "配置不存在: AIConfig id=" + id);
             }
-
             return item;
         }
-		
+
         public bool Contain(int id)
         {
             return this.dict.ContainsKey(id);
         }
 
-        public Dictionary<int, AIConfig> GetAll()
+        public IReadOnlyDictionary<int, AIConfig> GetAll()
         {
             return this.dict;
         }
-
-        public AIConfig GetOne()
-        {
-            if (this.dict == null || this.dict.Count <= 0)
-            {
-                return null;
-            }
-            
-            var enumerator = this.dict.Values.GetEnumerator();
-            enumerator.MoveNext();
-            return enumerator.Current; 
-        }
     }
 
-	public partial class AIConfig: ProtoObject, IConfig
-	{
+    public partial class AIConfig
+    {
 		/// <summary>Id</summary>
 		public int Id { get; set; }
 		/// <summary>所属ai</summary>
@@ -70,5 +57,5 @@ namespace ET
 		/// <summary>节点参数</summary>
 		public int[] NodeParams { get; set; }
 
-	}
+    }
 }
