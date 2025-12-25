@@ -6,18 +6,37 @@ namespace ET
 {
     [Config]
     public partial class UnitConfigCategory 
-        : Singleton<UnitConfigCategory>, ISingletonAwake
+        : Singleton<UnitConfigCategory>, IMerge
     {
+        /// <summary>
+        /// 配置列表，仅用于反序列化
+        /// </summary>
         [BsonElement("list")]
         private List<UnitConfig> list = new();
 
+        /// <summary>
+        /// 字典索引，运行期使用
+        /// </summary>
         [BsonIgnore]
         private Dictionary<int, UnitConfig> dict = new();
 
-        public void Awake()
+        public void Merge(object o)
         {
+            UnitConfigCategory s = o as UnitConfigCategory;
+            if (s == null)
+            {
+                return;
+            }
+        
+            // 1合并持久化数据（这是会被写入 bytes 的）
+            if (s.list != null && s.list.Count > 0)
+            {
+                this.list.AddRange(s.list);
+            }
+        
+            // 2构建运行期索引（不会被序列化）
             this.dict.Clear();
-            foreach (UnitConfig item in this.list)
+            foreach (var item in this.list)
             {
                 this.dict[item.Id] = item;
             }
@@ -25,10 +44,10 @@ namespace ET
 
         public UnitConfig Get(int id)
         {
-            if (!this.dict.TryGetValue(id, out UnitConfig item))
+            if (!this.dict.TryGetValue(id, out var item))
             {
                 throw new Exception(
-                    "配置不存在: UnitConfig id=" + id);
+                    $"配置找不到，配置表名: {nameof(UnitConfig)}，配置id: {id}");
             }
             return item;
         }
@@ -38,13 +57,25 @@ namespace ET
             return this.dict.ContainsKey(id);
         }
 
-        public IReadOnlyDictionary<int, UnitConfig> GetAll()
+        public Dictionary<int, UnitConfig> GetAll()
         {
             return this.dict;
         }
+
+        public UnitConfig GetOne()
+        {
+            if (this.dict.Count == 0)
+            {
+                return null;
+            }
+
+            using var enumerator = this.dict.Values.GetEnumerator();
+            enumerator.MoveNext();
+            return enumerator.Current;
+        }
     }
 
-    public partial class UnitConfig
+    public partial class UnitConfig : ProtoObject, IConfig
     {
 		/// <summary>Id</summary>
 		public int Id { get; set; }

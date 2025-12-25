@@ -6,18 +6,37 @@ namespace ET
 {
     [Config]
     public partial class StartZoneConfigCategory 
-        : Singleton<StartZoneConfigCategory>, ISingletonAwake
+        : Singleton<StartZoneConfigCategory>, IMerge
     {
+        /// <summary>
+        /// 配置列表，仅用于反序列化
+        /// </summary>
         [BsonElement("list")]
         private List<StartZoneConfig> list = new();
 
+        /// <summary>
+        /// 字典索引，运行期使用
+        /// </summary>
         [BsonIgnore]
         private Dictionary<int, StartZoneConfig> dict = new();
 
-        public void Awake()
+        public void Merge(object o)
         {
+            StartZoneConfigCategory s = o as StartZoneConfigCategory;
+            if (s == null)
+            {
+                return;
+            }
+        
+            // 1合并持久化数据（这是会被写入 bytes 的）
+            if (s.list != null && s.list.Count > 0)
+            {
+                this.list.AddRange(s.list);
+            }
+        
+            // 2构建运行期索引（不会被序列化）
             this.dict.Clear();
-            foreach (StartZoneConfig item in this.list)
+            foreach (var item in this.list)
             {
                 this.dict[item.Id] = item;
             }
@@ -25,10 +44,10 @@ namespace ET
 
         public StartZoneConfig Get(int id)
         {
-            if (!this.dict.TryGetValue(id, out StartZoneConfig item))
+            if (!this.dict.TryGetValue(id, out var item))
             {
                 throw new Exception(
-                    "配置不存在: StartZoneConfig id=" + id);
+                    $"配置找不到，配置表名: {nameof(StartZoneConfig)}，配置id: {id}");
             }
             return item;
         }
@@ -38,13 +57,25 @@ namespace ET
             return this.dict.ContainsKey(id);
         }
 
-        public IReadOnlyDictionary<int, StartZoneConfig> GetAll()
+        public Dictionary<int, StartZoneConfig> GetAll()
         {
             return this.dict;
         }
+
+        public StartZoneConfig GetOne()
+        {
+            if (this.dict.Count == 0)
+            {
+                return null;
+            }
+
+            using var enumerator = this.dict.Values.GetEnumerator();
+            enumerator.MoveNext();
+            return enumerator.Current;
+        }
     }
 
-    public partial class StartZoneConfig
+    public partial class StartZoneConfig : ProtoObject, IConfig
     {
 		/// <summary>Id</summary>
 		public int Id { get; set; }

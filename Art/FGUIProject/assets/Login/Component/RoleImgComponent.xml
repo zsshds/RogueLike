@@ -8,11 +8,5 @@
       <relation target="" sidePair="width-width,center-center,middle-middle"/>
     </image>
     <group id="n4_bxuq" name="n4" xy="48,0" size="482,768"/>
-    <component id="n2_bxuq" name="Btn_NextRole" src="h3lum" fileName="Component/NextRoleButton.xml" xy="443,324" size="134,132" aspect="true">
-      <relation target="" sidePair="middle-middle,right-right"/>
-    </component>
-    <component id="n3_bxuq" name="Btn_PreRole" src="h3lum" fileName="Component/NextRoleButton.xml" xy="0,324" size="134,132" aspect="true" controller="ArC,1">
-      <relation target="" sidePair="middle-middle,left-left"/>
-    </component>
   </displayList>
 </component>

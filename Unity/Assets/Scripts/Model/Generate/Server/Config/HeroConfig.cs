@@ -6,18 +6,37 @@ namespace ET
 {
     [Config]
     public partial class HeroConfigCategory 
-        : Singleton<HeroConfigCategory>, ISingletonAwake
+        : Singleton<HeroConfigCategory>, IMerge
     {
+        /// <summary>
+        /// 配置列表，仅用于反序列化
+        /// </summary>
         [BsonElement("list")]
         private List<HeroConfig> list = new();
 
+        /// <summary>
+        /// 字典索引，运行期使用
+        /// </summary>
         [BsonIgnore]
         private Dictionary<int, HeroConfig> dict = new();
 
-        public void Awake()
+        public void Merge(object o)
         {
+            HeroConfigCategory s = o as HeroConfigCategory;
+            if (s == null)
+            {
+                return;
+            }
+        
+            // 1合并持久化数据（这是会被写入 bytes 的）
+            if (s.list != null && s.list.Count > 0)
+            {
+                this.list.AddRange(s.list);
+            }
+        
+            // 2构建运行期索引（不会被序列化）
             this.dict.Clear();
-            foreach (HeroConfig item in this.list)
+            foreach (var item in this.list)
             {
                 this.dict[item.Id] = item;
             }
@@ -25,10 +44,10 @@ namespace ET
 
         public HeroConfig Get(int id)
         {
-            if (!this.dict.TryGetValue(id, out HeroConfig item))
+            if (!this.dict.TryGetValue(id, out var item))
             {
                 throw new Exception(
-                    "配置不存在: HeroConfig id=" + id);
+                    $"配置找不到，配置表名: {nameof(HeroConfig)}，配置id: {id}");
             }
             return item;
         }
@@ -38,13 +57,25 @@ namespace ET
             return this.dict.ContainsKey(id);
         }
 
-        public IReadOnlyDictionary<int, HeroConfig> GetAll()
+        public Dictionary<int, HeroConfig> GetAll()
         {
             return this.dict;
         }
+
+        public HeroConfig GetOne()
+        {
+            if (this.dict.Count == 0)
+            {
+                return null;
+            }
+
+            using var enumerator = this.dict.Values.GetEnumerator();
+            enumerator.MoveNext();
+            return enumerator.Current;
+        }
     }
 
-    public partial class HeroConfig
+    public partial class HeroConfig : ProtoObject, IConfig
     {
 		/// <summary>Id</summary>
 		public int Id { get; set; }
@@ -57,7 +88,7 @@ namespace ET
 		/// <summary>Icon</summary>
 		public string Icon { get; set; }
 		/// <summary>AttributeDict</summary>
-		public Dictionary<int, long> AttributeDict { get; set; }
+		public Dictionary<string, long> AttributeDict { get; set; }
 
     }
 }

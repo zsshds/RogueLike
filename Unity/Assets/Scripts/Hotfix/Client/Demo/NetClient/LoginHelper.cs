@@ -88,7 +88,6 @@ namespace ET.Client
             {
                 await EventSystem.Instance.PublishAsync(root, new EnterServerHaveRoles(){RoleInfos = r2CGetRoles.RoleInfo});                                 
             }
-
             // //请求获取RealmKey
             // C2R_GetRealmKey c2RGetRealmKey = C2R_GetRealmKey.Create();
             // c2RGetRealmKey.ServerId = erverInfosProto.Id;
@@ -110,6 +109,11 @@ namespace ET.Client
             // Log.Info("登录游戏成功");
             // root.GetComponent<PlayerComponent>().MyId = netClient2MainLoginGame.PlayerId;
         }
+
+        public static async ETTask EnterGameWithRoleInfo(Scene root, RoleInfoProto roleInfoProto)
+        {
+            await ETTask.CompletedTask;
+        } 
 
         public static async ETTask EnterGame(Scene root, ServerInfosProto erverInfosProto)
         {

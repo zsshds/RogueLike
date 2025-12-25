@@ -13,6 +13,12 @@
       <relation target="n4_bxuq" sidePair=""/>
     </text>
     <component id="n4_bxuq" name="RoleImgComponent" src="bxuqu" fileName="Component/RoleImgComponent.xml" xy="146,170" group="n11_lh2m"/>
-    <group id="n11_lh2m" name="n11" xy="146,125" size="577,814"/>
+    <component id="n12_ktul" name="Btn_NextRole" src="h3lum" fileName="Component/NextRoleButton.xml" xy="590,494" size="134,132" group="n11_lh2m" aspect="true">
+      <relation target="" sidePair="middle-middle,right-right"/>
+    </component>
+    <component id="n13_ktul" name="Btn_PreRole" src="h3lum" fileName="Component/NextRoleButton.xml" xy="147,494" size="134,132" group="n11_lh2m" aspect="true" controller="ArC,1">
+      <relation target="" sidePair="middle-middle,left-left"/>
+    </component>
+    <group id="n11_lh2m" name="n11" xy="146,125" size="578,814"/>
   </displayList>
 </component>

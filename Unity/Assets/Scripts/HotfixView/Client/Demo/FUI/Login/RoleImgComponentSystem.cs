@@ -8,14 +8,6 @@ namespace ET.Client
     {
         public static void Init(this FUI_RoleImgComponent self, HeroConfig heroConfig, Scene scene)
         {
-            self.Btn_NextRole.onClick.Add(() =>
-            {
-                EventSystem.Instance.Publish(scene, new OnClickNextRole());
-            });
-            self.Btn_PreRole.onClick.Add(() =>
-            {
-                EventSystem.Instance.Publish(scene, new OnClickPreRole());
-            });
             self.RefreshWithHeroConfig(heroConfig);
         }
         

@@ -35,7 +35,7 @@ namespace ET.Client
                 //添加点击事件
                 serverInfoButton.onClick.Add(() =>
                 {
-                    LoginHelper.EnterGame(self.Root(), serverInfo.ToMessage()).Coroutine();
+                    LoginHelper.EnterServerAndGetRoleInfo(self.Root(), serverInfo.ToMessage()).Coroutine();
                 });
             };
             self.FUISelectServerPanel.List_ServerBtn.numItems = serverInfos.Count; 

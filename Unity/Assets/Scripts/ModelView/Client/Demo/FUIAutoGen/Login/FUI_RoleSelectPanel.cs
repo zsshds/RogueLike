@@ -13,6 +13,8 @@ namespace ET.Client.Login
         public ET.Client.Common.FUI_CommonButton Btn_CreateNewRole;
         public GTextField Txt_RoleNumber;
         public ET.Client.Login.FUI_RoleImgComponent RoleImgComponent;
+        public ET.Client.Login.FUI_NextRoleButton Btn_NextRole;
+        public ET.Client.Login.FUI_NextRoleButton Btn_PreRole;
         public const string URL = "ui://9q0q76hcbxuqp";
 
         public static FUI_RoleSelectPanel CreateInstance()
@@ -28,6 +30,8 @@ namespace ET.Client.Login
             Btn_CreateNewRole = (ET.Client.Common.FUI_CommonButton)GetChildAt(3);
             Txt_RoleNumber = (GTextField)GetChildAt(4);
             RoleImgComponent = (ET.Client.Login.FUI_RoleImgComponent)GetChildAt(5);
+            Btn_NextRole = (ET.Client.Login.FUI_NextRoleButton)GetChildAt(6);
+            Btn_PreRole = (ET.Client.Login.FUI_NextRoleButton)GetChildAt(7);
         }
     }
 }

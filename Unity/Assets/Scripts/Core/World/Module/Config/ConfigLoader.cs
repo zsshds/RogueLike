@@ -57,6 +57,12 @@ namespace ET
         private static void LoadOneConfig(Type configType, byte[] oneConfigBytes)
         {
             object category = MongoHelper.Deserialize(configType, oneConfigBytes, 0, oneConfigBytes.Length);
+            // <-- 新增：如果对象实现了 IMerge，就调用 Merge(category) 以构建运行时 dict
+            if (category is IMerge merge)
+            {
+                // 把自身作为参数传入，Merge 会读取自身的 list 并填充 dict
+                merge.Merge(category);
+            }
             ASingleton singleton = category as ASingleton;
             World.Instance.AddSingleton(singleton);
         }

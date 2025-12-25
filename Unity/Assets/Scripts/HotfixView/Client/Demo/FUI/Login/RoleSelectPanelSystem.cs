@@ -2,29 +2,6 @@ using System.Collections.Generic;
 
 namespace ET.Client
 {
-
-    [Event(SceneType.Demo)]
-    public class RoleSelectPanel_OnClickNextRole : AEvent<Scene, OnClickNextRole>
-    {
-        protected override async ETTask Run(Scene scene, OnClickNextRole a)
-        {
-            RoleSelectPanel panel = scene.Root().GetComponent<FUIComponent>().GetPanelLogic<RoleSelectPanel>();
-            panel.OnClickNextRole();
-            await ETTask.CompletedTask;
-        }
-    }
-    
-    [Event(SceneType.Demo)]
-    public class RoleSelectPanel_OnClickPreRole : AEvent<Scene, OnClickPreRole>
-    {
-        protected override async ETTask Run(Scene scene, OnClickPreRole a)
-        {
-            RoleSelectPanel panel = scene.Root().GetComponent<FUIComponent>().GetPanelLogic<RoleSelectPanel>();
-            panel.OnClickPreRole();
-            await ETTask.CompletedTask;
-        }
-    }
-    
     [EntitySystemOf(typeof(RoleSelectPanel))]
     [FriendOf(typeof(RoleSelectPanel))]
     public static partial class RoleSelectPanelSystem
@@ -32,6 +9,14 @@ namespace ET.Client
         [EntitySystem]
         private static void Awake(this RoleSelectPanel self)
         {
+            self.FUIRoleSelectPanel.Btn_NextRole.onClick.Add(() =>
+            {
+                self.OnClickNextRole();
+            });
+            self.FUIRoleSelectPanel.Btn_PreRole.onClick.Add(() =>
+            {
+                self.OnClickPreRole();
+            });
             self.HeroConfigs = new List<HeroConfig>(HeroConfigCategory.Instance.GetAll().Values);
             self.SelectIndex = 0;
         }
@@ -39,8 +24,15 @@ namespace ET.Client
         [EntitySystem]
         private static void Show(this RoleSelectPanel self)
         {
+            self.Refresh();
+        }
+        
+        private static void Refresh(this RoleSelectPanel self)
+        {
             self.FUIRoleSelectPanel.RoleImgComponent.Init(self.HeroConfigs[self.SelectIndex], self.Scene());
             self.FUIRoleSelectPanel.RoleInfoComponent.Init(self.HeroConfigs[self.SelectIndex]);
+            self.FUIRoleSelectPanel.Txt_RoleNumber.text = $"当前{self.SelectIndex + 1}/{self.HeroConfigs.Count}";
+            
         }
         
         //点击切换到下一个英雄
@@ -51,8 +43,7 @@ namespace ET.Client
             {
                 self.SelectIndex = 0;
             }
-            self.FUIRoleSelectPanel.RoleImgComponent.Init(self.HeroConfigs[self.SelectIndex], self.Scene());
-            self.FUIRoleSelectPanel.RoleInfoComponent.Init(self.HeroConfigs[self.SelectIndex]);
+            self.Refresh();
         }
         
         //点击切换到上一个英雄
@@ -63,8 +54,7 @@ namespace ET.Client
             {
                 self.SelectIndex = self.HeroConfigs.Count - 1;
             }
-            self.FUIRoleSelectPanel.RoleImgComponent.Init(self.HeroConfigs[self.SelectIndex], self.Scene());
-            self.FUIRoleSelectPanel.RoleInfoComponent.Init(self.HeroConfigs[self.SelectIndex]);
+            self.Refresh();
         }
     }
 }

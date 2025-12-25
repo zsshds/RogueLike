@@ -9,8 +9,6 @@ namespace ET.Client.Login
     public partial class FUI_RoleImgComponent: GComponent
     {
         public GLoader Img_Role;
-        public ET.Client.Login.FUI_NextRoleButton Btn_NextRole;
-        public ET.Client.Login.FUI_NextRoleButton Btn_PreRole;
         public const string URL = "ui://9q0q76hcbxuqu";
 
         public static FUI_RoleImgComponent CreateInstance()
@@ -22,8 +20,6 @@ namespace ET.Client.Login
         {
             base.ConstructFromXML(xml);
             Img_Role = (GLoader)GetChildAt(0);
-            Btn_NextRole = (ET.Client.Login.FUI_NextRoleButton)GetChildAt(2);
-            Btn_PreRole = (ET.Client.Login.FUI_NextRoleButton)GetChildAt(3);
         }
     }
 }

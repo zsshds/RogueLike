@@ -1,0 +1,7 @@
+{"list": [
+{"_t":"HeroConfig","_id":1001,"Type":1,"Name":"孙悟空","Desc":"孙悟空","Icon":"ui://Hero/Hero_1001","AttributeDict":{"1000":50000,"1002":5000000,"1011":45000}},
+{"_t":"HeroConfig","_id":1002,"Type":1,"Name":"猪悟能","Desc":"猪悟能","Icon":"ui://Hero/Hero_1002","AttributeDict":{"1000":43000,"1002":8000000,"1011":37000}},
+{"_t":"HeroConfig","_id":1003,"Type":1,"Name":"沙悟净","Desc":"沙悟净","Icon":"ui://Hero/Hero_1003","AttributeDict":{"1000":47000,"1002":6000000,"1011":40000}},
+{"_t":"HeroConfig","_id":1004,"Type":1,"Name":"唐三藏","Desc":"唐三藏","Icon":"ui://Hero/Hero_1004","AttributeDict":{"1000":40000,"1002":4500000,"1011":50000}},
+{"_t":"HeroConfig","_id":1005,"Type":2,"Name":"白龙马","Desc":"白龙马","Icon":"ui://Hero/Hero_1005","AttributeDict":{"1000":55000,"1002":5000000,"1011":45000}},
+]}
