@@ -88,26 +88,35 @@ namespace ET.Client
             {
                 await EventSystem.Instance.PublishAsync(root, new EnterServerHaveRoles(){RoleInfos = r2CGetRoles.RoleInfo});                                 
             }
-            // //请求获取RealmKey
-            // C2R_GetRealmKey c2RGetRealmKey = C2R_GetRealmKey.Create();
-            // c2RGetRealmKey.ServerId = erverInfosProto.Id;
-            // c2RGetRealmKey.Account = account;
-            // c2RGetRealmKey.Token = Token;
-            // R2C_GetRealmKey r2CGetRealmKey = await clientSenderComponent.Call(c2RGetRealmKey) as R2C_GetRealmKey;
-            // if (r2CGetRealmKey.Error != ErrorCode.ERR_Success)
-            // {
-            //     Log.Error("获取RealmKey失败！");
-            //     return;
-            // }
-            // NetClient2Main_LoginGame netClient2MainLoginGame =
-            //         await clientSenderComponent.LoginGameAsync(account, r2CGetRealmKey.Key, roleInfoProto.Id, r2CGetRealmKey.Address);
-            // if (netClient2MainLoginGame.Error != ErrorCode.ERR_Success)
-            // {
-            //     Log.Error("登录游戏失败！");
-            //     return;
-            // }
-            // Log.Info("登录游戏成功");
-            // root.GetComponent<PlayerComponent>().MyId = netClient2MainLoginGame.PlayerId;
+            //请求获取RealmKey
+            C2R_GetRealmKey c2RGetRealmKey = C2R_GetRealmKey.Create();
+            c2RGetRealmKey.ServerId = serverInfo.Id;
+            c2RGetRealmKey.Account = account;
+            c2RGetRealmKey.Token = Token;
+            R2C_GetRealmKey r2CGetRealmKey = await clientSenderComponent.Call(c2RGetRealmKey) as R2C_GetRealmKey;
+            if (r2CGetRealmKey.Error != ErrorCode.ERR_Success)
+            {
+                Log.Error("获取RealmKey失败！");
+                return;
+            }
+            NetClient2Main_LoginGame netClient2MainLoginGame =
+                    await clientSenderComponent.LoginGameAsync(account, r2CGetRealmKey.Key, roleInfoProto.Id, r2CGetRealmKey.Address);
+            if (netClient2MainLoginGame.Error != ErrorCode.ERR_Success)
+            {
+                Log.Error("登录游戏失败！");
+                return;
+            }
+            Log.Info("登录游戏成功");
+            root.GetComponent<PlayerComponent>().MyId = netClient2MainLoginGame.PlayerId;
+            root.GetComponent<PlayerComponent>().RealmKey = r2CGetRealmKey.Key;
+            root.GetComponent<PlayerComponent>().GateId = r2CGetRealmKey.GateId;
+        }
+
+        public static async ETTask EnterGameAndCreatRole(Scene root, RoleInfoProto roleInfoProto)
+        {
+            ClientSenderComponent clientSenderComponent = root.GetComponent<ClientSenderComponent>();
+            
+            await ETTask.CompletedTask;
         }
 
         public static async ETTask EnterGameWithRoleInfo(Scene root, RoleInfoProto roleInfoProto)
