@@ -6,7 +6,8 @@
         //客户端Account组件，存储服务器下发的player，unit映射以及token等必要信息，这个组件有一个子组件是RoleInfo
         public string Token;
         public string Account;
-        public string RealmAddress;
+        public int serverID;
+        public long GateId;
         public long RealmKey;
         public long RoleId;
     }

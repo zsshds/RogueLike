@@ -5,6 +5,7 @@
     {
         protected override async ETTask Run(Scene scene, EnterServerNotHaveRoles a)
         {
+            scene.Root().GetComponent<FUIComponent>().HidePanel<SelectServerPanel>();
             await scene.Root().GetComponent<FUIComponent>().ShowPanelAsync<RoleSelectPanel>();
         }
     }

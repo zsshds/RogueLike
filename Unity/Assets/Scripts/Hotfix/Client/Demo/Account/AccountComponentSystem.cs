@@ -15,13 +15,6 @@
             self.Token = Token;
             self.Account = Account;
         }
-
-        public static void SetRealmInfo(this AccountComponent self, string realmAddress, long realmKey)
-        {
-            //其他的信息会记录在RoleInfo中
-            self.RealmAddress = realmAddress;
-            self.RealmKey = realmKey;
-        }
         
         [EntitySystem]
         private static void Destroy(this ET.Client.AccountComponent self)

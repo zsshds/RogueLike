@@ -50,9 +50,14 @@ namespace ET.Client
         
         public static async ETTask EnterServerAndGetRoleInfo(Scene root, ServerInfosProto serverInfo)
         { 
+            //第一时间先前端缓存一份serverId
+            root.GetComponent<AccountComponent>().serverID = serverInfo.Id;
             ClientSenderComponent clientSenderComponent = root.GetComponent<ClientSenderComponent>();
             string Token = root.GetComponent<AccountComponent>().Token;
             string account = root.GetComponent<AccountComponent>().Account;
+            
+        
+            
             //获取区服角色列表
             C2R_GetRoles c2RGetRoles = C2R_GetRoles.Create();
             c2RGetRoles.Token = Token;
@@ -68,19 +73,6 @@ namespace ET.Client
             RoleInfoProto roleInfoProto = default;
             if (r2CGetRoles.RoleInfo.Count <= 0)
             {
-                // //无角色，创建角色
-                // C2R_CreateRole c2RCreateRole = C2R_CreateRole.Create();
-                // c2RCreateRole.Account = account;
-                // c2RCreateRole.Token = Token;
-                // c2RCreateRole.ServerId = erverInfosProto.Id;
-                // c2RCreateRole.Name = account;
-                // R2C_CreatRole r2CCreatRole = await clientSenderComponent.Call(c2RCreateRole) as R2C_CreatRole;
-                // if (r2CCreatRole.Error != ErrorCode.ERR_Success)
-                // {
-                //     Log.Error("创建角色失败！");
-                //     return;
-                // }
-                // roleInfoProto = r2CCreatRole.roleInfo;
                 Log.Info($"当前服务器：{serverInfo.ServerName},暂无角色，请创建角色！");
                 await EventSystem.Instance.PublishAsync(root, new EnterServerNotHaveRoles());
             }
@@ -88,11 +80,32 @@ namespace ET.Client
             {
                 await EventSystem.Instance.PublishAsync(root, new EnterServerHaveRoles(){RoleInfos = r2CGetRoles.RoleInfo});                                 
             }
+        }
+
+        public static async ETTask EnterGameAndCreatRole(Scene root, string roleName, int heroId)
+        {
+            ClientSenderComponent clientSenderComponent = root.GetComponent<ClientSenderComponent>();
+            //无角色，创建角色
+            AccountComponent accountComponent =  root.GetComponent<AccountComponent>();
+            C2R_CreateRole c2RCreateRole = C2R_CreateRole.Create();
+            c2RCreateRole.Account = accountComponent.Account;
+            c2RCreateRole.Token = accountComponent.Token;
+            c2RCreateRole.ServerId = accountComponent.serverID;
+            c2RCreateRole.Name = roleName;
+            c2RCreateRole.HeroId = heroId;
+            R2C_CreatRole r2CCreatRole = await clientSenderComponent.Call(c2RCreateRole) as R2C_CreatRole;
+            if (r2CCreatRole.Error != ErrorCode.ERR_Success)
+            {
+                Log.Error("创建角色失败！");
+                return;
+            }
+            RoleInfo newRoleInfo = accountComponent.AddChild<RoleInfo>();
+            newRoleInfo.SetAttu(r2CCreatRole.roleInfo);
             //请求获取RealmKey
             C2R_GetRealmKey c2RGetRealmKey = C2R_GetRealmKey.Create();
-            c2RGetRealmKey.ServerId = serverInfo.Id;
-            c2RGetRealmKey.Account = account;
-            c2RGetRealmKey.Token = Token;
+            c2RGetRealmKey.ServerId = accountComponent.serverID;
+            c2RGetRealmKey.Account = accountComponent.Account;
+            c2RGetRealmKey.Token = accountComponent.Token;
             R2C_GetRealmKey r2CGetRealmKey = await clientSenderComponent.Call(c2RGetRealmKey) as R2C_GetRealmKey;
             if (r2CGetRealmKey.Error != ErrorCode.ERR_Success)
             {
@@ -100,7 +113,7 @@ namespace ET.Client
                 return;
             }
             NetClient2Main_LoginGame netClient2MainLoginGame =
-                    await clientSenderComponent.LoginGameAsync(account, r2CGetRealmKey.Key, roleInfoProto.Id, r2CGetRealmKey.Address);
+                    await clientSenderComponent.LoginGameAsync(accountComponent.Account, r2CGetRealmKey.Key, newRoleInfo.Id, r2CGetRealmKey.Address);
             if (netClient2MainLoginGame.Error != ErrorCode.ERR_Success)
             {
                 Log.Error("登录游戏失败！");
@@ -108,15 +121,8 @@ namespace ET.Client
             }
             Log.Info("登录游戏成功");
             root.GetComponent<PlayerComponent>().MyId = netClient2MainLoginGame.PlayerId;
-            root.GetComponent<PlayerComponent>().RealmKey = r2CGetRealmKey.Key;
-            root.GetComponent<PlayerComponent>().GateId = r2CGetRealmKey.GateId;
-        }
-
-        public static async ETTask EnterGameAndCreatRole(Scene root, RoleInfoProto roleInfoProto)
-        {
-            ClientSenderComponent clientSenderComponent = root.GetComponent<ClientSenderComponent>();
-            
-            await ETTask.CompletedTask;
+            root.GetComponent<AccountComponent>().RealmKey = r2CGetRealmKey.Key;
+            root.GetComponent<AccountComponent>().GateId = r2CGetRealmKey.GateId;
         }
 
         public static async ETTask EnterGameWithRoleInfo(Scene root, RoleInfoProto roleInfoProto)

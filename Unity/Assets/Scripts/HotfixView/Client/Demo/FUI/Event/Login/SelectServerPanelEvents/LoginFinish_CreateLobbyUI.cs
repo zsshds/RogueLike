@@ -5,6 +5,7 @@
 	{
 		protected override async ETTask Run(Scene scene, LoginAndGetServerInfoFinish args)
 		{
+			scene.Root().GetComponent<FUIComponent>().HidePanel<SelectServerPanel>();
 			await scene.Root().GetComponent<FUIComponent>().ShowPanelAsync<SelectServerPanel>();
 		}
 	}
