@@ -5,6 +5,7 @@
 {"_t":"StartSceneConfig","_id":5,"Process":1,"Zone":1,"SceneType":"Match","Name":"Match"},
 {"_t":"StartSceneConfig","_id":6,"Process":1,"Zone":1,"SceneType":"Map","Name":"HomeScene"},
 {"_t":"StartSceneConfig","_id":7,"Process":1,"Zone":2,"SceneType":"Map","Name":"Map2"},
+{"_t":"StartSceneConfig","_id":8,"Process":1,"Zone":3,"SceneType":"Map","Name":"Map3"},
 {"_t":"StartSceneConfig","_id":300,"Process":1,"Zone":3,"SceneType":"RouterManager","Name":"RouterManager","Port":30300},
 {"_t":"StartSceneConfig","_id":301,"Process":1,"Zone":3,"SceneType":"Router","Name":"Router01","Port":30301},
 {"_t":"StartSceneConfig","_id":302,"Process":1,"Zone":3,"SceneType":"Router","Name":"Router02","Port":30302},

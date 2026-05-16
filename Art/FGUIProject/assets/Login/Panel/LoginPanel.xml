@@ -23,5 +23,10 @@
     <image id="n15_g5s0" name="n15" src="g5s06" fileName="res/title.png" xy="234,60" size="1450,330" aspect="true">
       <relation target="" sidePair="center-center,top-top"/>
     </image>
+    <graph id="n21_qhz1" name="n21" xy="-147,-128" size="2335,1339" alpha="0.8" type="rect" lineSize="0" fillColor="#ff000000"/>
+    <image id="n17_qhz1" name="n17" src="zijbh" fileName="res/CommonInfoBg.png" xy="489,280" size="942,519"/>
+    <text id="n18_qhz1" name="n18" xy="812,316" size="295,94" fontSize="72" color="#ffffff" bold="true" text="登录失败"/>
+    <text id="n19_qhz1" name="n19" xy="585,442" size="750,157" fontSize="50" color="#ffffff" autoSize="none" text="输入密码错误请重新登录"/>
+    <text id="n20_qhz1" name="n20" xy="825,719" size="270,42" fontSize="30" color="#ffffff" align="center" text="点击任意处关闭弹窗"/>
   </displayList>
 </component>

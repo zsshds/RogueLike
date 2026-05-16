@@ -3,5 +3,6 @@
 {"_t":"StartZoneConfig","_id":2,"DBConnection":"mongodb://127.0.0.1","DBName":"ET1","ZoneType":1,"ZoneName":"游戏二区"},
 {"_t":"StartZoneConfig","_id":3,"ZoneName":"机器人区"},
 {"_t":"StartZoneConfig","_id":4,"ZoneName":"路由区"},
+{"_t":"StartZoneConfig","_id":5,"DBConnection":"mongodb://127.0.0.1","DBName":"ET1","ZoneType":1,"ZoneName":"游戏三区"},
 {"_t":"StartZoneConfig","_id":1000,"DBConnection":"mongodb://127.0.0.1","DBName":"ET1000","ZoneName":"公共职能服"},
 ]}
