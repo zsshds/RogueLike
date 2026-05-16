@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="5razy0t5">
+  <resources>
+    <image id="zijbg" name="CommonBotton.png" path="/res/" exported="true" scale="9grid" scale9grid="85,31,172,49"/>
+    <image id="h3lun" name="InfoBG.png" path="/res/" exported="true" scale="9grid" scale9grid="128,112,316,275"/>
+    <image id="h3lu0" name="CommonBtnBg.png" path="/res/" exported="true"/>
+    <component id="h3lu1" name="CommonButton.xml" path="/Component/" exported="true"/>
+    <component id="a16cw" name="BreakButton.xml" path="/Component/" exported="true"/>
+    <image id="bxuqs" name="commonX.png" path="/res/" exported="true"/>
+    <image id="bxuqr" name="CommonPopBg.png" path="/res/" exported="true" scale="9grid" scale9grid="229,119,458,238"/>
+    <image id="zijba" name="黑半透明块.png" path="/res/" exported="true" scale9grid="1,1,2,2"/>
+  </resources>
+  <publish name=""/>
+</packageDescription>

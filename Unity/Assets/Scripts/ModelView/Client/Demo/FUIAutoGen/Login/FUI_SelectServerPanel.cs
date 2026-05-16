@@ -19,7 +19,7 @@ namespace ET.Client.Login
         public override void ConstructFromXML(XML xml)
         {
             base.ConstructFromXML(xml);
-            List_ServerBtn = (GList)GetChildAt(1);
+            List_ServerBtn = (GList)GetChildAt(2);
         }
     }
 }

@@ -16,6 +16,7 @@ using LicenseContext = OfficeOpenXml.LicenseContext;
 
 namespace ET
 {
+
     public enum ConfigType
     {
         c = 0,
@@ -27,6 +28,7 @@ namespace ET
     {
         [BsonElement]
         public string FieldCS;
+
         public string FieldDesc;
         public string FieldName;
         public string FieldType;
@@ -50,12 +52,13 @@ namespace ET
         public int Index;
         public Dictionary<string, HeadInfo> HeadInfos = new Dictionary<string, HeadInfo>();
     }
-    
+
     public static class ExcelExporter
     {
         private static string template;
 
         private const string ClientClassDir = "../Unity/Assets/Scripts/Model/Generate/Client/Config";
+
         // 服务端因为机器人的存在必须包含客户端所有配置，所以单独的c字段没有意义,单独的c就表示cs
         private const string ServerClassDir = "../Unity/Assets/Scripts/Model/Generate/Server/Config";
 
@@ -183,31 +186,34 @@ namespace ET
                     {
                         ExportClass(kv.Key, kv.Value.HeadInfos, ConfigType.c);
                     }
+
                     if (kv.Value.S)
                     {
                         ExportClass(kv.Key, kv.Value.HeadInfos, ConfigType.s);
                     }
+
                     ExportClass(kv.Key, kv.Value.HeadInfos, ConfigType.cs);
                 }
 
                 // 动态编译生成的配置代码
-                configAssemblies[(int) ConfigType.c] = DynamicBuild(ConfigType.c);
-                configAssemblies[(int) ConfigType.s] = DynamicBuild(ConfigType.s);
-                configAssemblies[(int) ConfigType.cs] = DynamicBuild(ConfigType.cs);
+                configAssemblies[(int)ConfigType.c] = DynamicBuild(ConfigType.c);
+                configAssemblies[(int)ConfigType.s] = DynamicBuild(ConfigType.s);
+                configAssemblies[(int)ConfigType.cs] = DynamicBuild(ConfigType.cs);
 
                 List<string> excels = FileHelper.GetAllFiles(excelDir, "*.xlsx");
-                
+
                 foreach (string path in excels)
                 {
                     ExportExcel(path);
                 }
-                
+
                 if (Directory.Exists(clientProtoDir))
                 {
                     Directory.Delete(clientProtoDir, true);
                 }
+
                 FileHelper.CopyDirectory("../Config/Excel/c", clientProtoDir);
-                
+
                 Log.Console("Export Excel Sucess!");
             }
             catch (Exception e)
@@ -245,7 +251,7 @@ namespace ET
                 fileNameWithoutCS = ss[0];
                 cs = ss[1];
             }
-            
+
             if (cs == "")
             {
                 cs = "cs";
@@ -272,6 +278,7 @@ namespace ET
                 ExportExcelJson(p, fileNameWithoutCS, table, ConfigType.s, relativePath);
                 ExportExcelProtobuf(ConfigType.s, protoName, relativePath);
             }
+
             ExportExcelJson(p, fileNameWithoutCS, table, ConfigType.cs, relativePath);
             ExportExcelProtobuf(ConfigType.cs, protoName, relativePath);
         }
@@ -283,7 +290,7 @@ namespace ET
 
         private static Assembly GetAssembly(ConfigType configType)
         {
-            return configAssemblies[(int) configType];
+            return configAssemblies[(int)configType];
         }
 
         private static string GetClassDir(ConfigType configType)
@@ -295,7 +302,7 @@ namespace ET
                 _ => CSClassDir
             };
         }
-        
+
         // 动态编译生成的cs代码
         private static Assembly DynamicBuild(ConfigType configType)
         {
@@ -359,7 +366,6 @@ namespace ET
             return ass;
         }
 
-
         #region 导出class
 
         static void ExportExcelClass(ExcelPackage p, string name, Table table)
@@ -397,7 +403,7 @@ namespace ET
                     table.HeadInfos[fieldName] = null;
                     continue;
                 }
-                
+
                 if (fieldCS == "")
                 {
                     fieldCS = "cs";
@@ -419,51 +425,79 @@ namespace ET
                 table.HeadInfos[fieldName] = new HeadInfo(fieldCS, fieldDesc, fieldName, fieldType, ++table.Index);
             }
         }
+        
+
 
         static void ExportClass(string protoName, Dictionary<string, HeadInfo> classField, ConfigType configType)
         {
             string dir = GetClassDir(configType);
             if (!Directory.Exists(dir))
-            {
                 Directory.CreateDirectory(dir);
-            }
 
             string exportPath = Path.Combine(dir, $"{protoName}.cs");
 
             using FileStream txt = new FileStream(exportPath, FileMode.Create);
             using StreamWriter sw = new StreamWriter(txt);
 
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sbFields = new StringBuilder();
             foreach ((string _, HeadInfo headInfo) in classField)
             {
                 if (headInfo == null)
-                {
                     continue;
-                }
-
                 if (configType != ConfigType.cs && !headInfo.FieldCS.Contains(configType.ToString()))
-                {
                     continue;
-                }
 
-                sb.Append($"\t\t/// <summary>{headInfo.FieldDesc}</summary>\n");
-                string fieldType = headInfo.FieldType;
-                sb.Append($"\t\tpublic {fieldType} {headInfo.FieldName} {{ get; set; }}\n");
+                sbFields.Append($"\t\t/// <summary>{headInfo.FieldDesc}</summary>\n");
+                sbFields.Append($"\t\tpublic {headInfo.FieldType} {headInfo.FieldName} {{ get; set; }}\n");
             }
-
-            string content = template.Replace("(ConfigName)", protoName).Replace(("(Fields)"), sb.ToString());
+            
+            // 读取 template.txt 模板，替换占位符
+            string content = template
+                    .Replace("(ConfigName)", protoName)
+                    .Replace("(Fields)", sbFields.ToString());
             sw.Write(content);
         }
+
+
 
         #endregion
 
         #region 导出json
 
-
+        // static void ExportExcelJson(ExcelPackage p, string name, Table table, ConfigType configType, string relativeDir)
+        // {
+        //     StringBuilder sb = new StringBuilder();
+        //     //sb.Append("{\"dict\": [\n");
+        //     sb.Append("{\"list\": [\n");
+        //     foreach (ExcelWorksheet worksheet in p.Workbook.Worksheets)
+        //     {
+        //         if (worksheet.Name.StartsWith("#"))
+        //         {
+        //             continue;
+        //         }
+        //
+        //         ExportSheetJson(worksheet, name, table.HeadInfos, configType, sb);
+        //     }
+        //
+        //     sb.Append("]}\n");
+        //
+        //     string dir = string.Format(jsonDir, configType.ToString(), relativeDir);
+        //     if (!Directory.Exists(dir))
+        //     {
+        //         Directory.CreateDirectory(dir);
+        //     }
+        //
+        //     string jsonPath = Path.Combine(dir, $"{name}.txt");
+        //     using FileStream txt = new FileStream(jsonPath, FileMode.Create);
+        //     using StreamWriter sw = new StreamWriter(txt);
+        //     sw.Write(sb.ToString());
+        // }
+        
         static void ExportExcelJson(ExcelPackage p, string name, Table table, ConfigType configType, string relativeDir)
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("{\"dict\": [\n");
+            // 1) 跨 Sheet 聚合：id(string) -> 字段名 -> json值
+            Dictionary<string, Dictionary<string, string>> recordsById = new();
+
             foreach (ExcelWorksheet worksheet in p.Workbook.Worksheets)
             {
                 if (worksheet.Name.StartsWith("#"))
@@ -471,11 +505,55 @@ namespace ET
                     continue;
                 }
 
-                ExportSheetJson(worksheet, name, table.HeadInfos, configType, sb);
+                // 只收集数据，不写 sb
+                CollectSheetJson(worksheet, name, table.HeadInfos, configType, recordsById);
+            }
+
+            // 2) 输出 list
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{\"list\": [\n");
+
+            // 为了稳定输出，按 _id 数值排序（id 可能是 int）
+            foreach (var kv in recordsById.OrderBy(k =>
+                     int.TryParse(k.Key, out var id) ? id : int.MaxValue))
+            {
+                var fieldMap = kv.Value;
+
+                // 必备字段
+                if (!fieldMap.TryGetValue("_t", out var tVal))
+                    tVal = $"\"{name}\"";
+                if (!fieldMap.TryGetValue("_id", out var idVal))
+                    idVal = kv.Key;
+
+                // 组装单条 json
+                StringBuilder line = new StringBuilder();
+                line.Append("{");
+                line.Append($"\"_t\":{tVal},\"_id\":{idVal}");
+
+                // 按表头收集顺序输出（FieldIndex）
+                foreach (HeadInfo head in table.HeadInfos.Values.Where(h => h != null).OrderBy(h => h.FieldIndex))
+                {
+                    // Id 已经映射到 _id
+                    if (head.FieldName == "Id")
+                        continue;
+
+                    // cs/s/c 过滤（与原逻辑一致）
+                    if (configType != ConfigType.cs && !head.FieldCS.Contains(configType.ToString()))
+                        continue;
+
+                    if (!fieldMap.TryGetValue(head.FieldName, out string v))
+                        continue;
+
+                    line.Append($",\"{head.FieldName}\":{v}");
+                }
+
+                line.Append("},\n");
+                sb.Append(line.ToString());
             }
 
             sb.Append("]}\n");
 
+            // 3) 写文件
             string dir = string.Format(jsonDir, configType.ToString(), relativeDir);
             if (!Directory.Exists(dir))
             {
@@ -488,10 +566,11 @@ namespace ET
             sw.Write(sb.ToString());
         }
 
-        static void ExportSheetJson(ExcelWorksheet worksheet, string name, 
-                Dictionary<string, HeadInfo> classField, ConfigType configType, StringBuilder sb)
+    
+        static void CollectSheetJson(ExcelWorksheet worksheet, string name, Dictionary<string, HeadInfo> classField, ConfigType configType, Dictionary<string, Dictionary<string, string>> recordsById)
         {
             string configTypeStr = configType.ToString();
+
             for (int row = 6; row <= worksheet.Dimension.End.Row; ++row)
             {
                 string prefix = worksheet.Cells[row, 2].Text.Trim();
@@ -504,27 +583,42 @@ namespace ET
                 {
                     prefix = "cs";
                 }
-                
+
                 if (configType != ConfigType.cs && !prefix.Contains(configTypeStr))
                 {
                     continue;
                 }
 
-                if (worksheet.Cells[row, 3].Text.Trim() == "")
+                // 你的表结构里 Id 一直在第 3 列（C 列），两张 sheet 都一致
+                string idText = worksheet.Cells[row, 3].Text.Trim();
+                if (string.IsNullOrEmpty(idText))
                 {
                     continue;
                 }
 
-                sb.Append($"[{worksheet.Cells[row, 3].Text.Trim()}, {{\"_t\":\"{name}\"");
+                string idKey = idText;
+
+                if (!recordsById.TryGetValue(idKey, out var fieldMap))
+                {
+                    fieldMap = new Dictionary<string, string>();
+                    recordsById[idKey] = fieldMap;
+
+                    fieldMap["_t"] = $"\"{name}\"";
+                    fieldMap["_id"] = idText; // 数字直接写
+                }
+
                 for (int col = 3; col <= worksheet.Dimension.End.Column; ++col)
                 {
                     string fieldName = worksheet.Cells[4, col].Text.Trim();
-                    if (!classField.ContainsKey(fieldName))
+                    if (string.IsNullOrEmpty(fieldName))
                     {
                         continue;
                     }
 
-                    HeadInfo headInfo = classField[fieldName];
+                    if (!classField.TryGetValue(fieldName, out HeadInfo headInfo))
+                    {
+                        continue;
+                    }
 
                     if (headInfo == null)
                     {
@@ -536,21 +630,100 @@ namespace ET
                         continue;
                     }
 
-                    string fieldN = headInfo.FieldName;
-                    if (fieldN == "Id")
+                    // Id -> _id 已经写过
+                    if (headInfo.FieldName == "Id")
                     {
-                        fieldN = "_id";
+                        continue;
                     }
 
-                    sb.Append($",\"{fieldN}\":{Convert(headInfo.FieldType, worksheet.Cells[row, col].Text.Trim())}");
-                }
+                    string cellValue = worksheet.Cells[row, col].Text.Trim();
+                    if (string.IsNullOrEmpty(cellValue))
+                    {
+                        continue;
+                    }
 
-                sb.Append("}],\n");
+                    string jsonValue = Convert(headInfo.FieldType, cellValue);
+
+                    // 多 sheet 合并：后写入覆盖前写入（一般没冲突；若冲突，后表优先）
+                    fieldMap[headInfo.FieldName] = jsonValue;
+                }
             }
         }
 
+
+
+        
+        // static void ExportSheetJson(ExcelWorksheet worksheet, string name,
+        // Dictionary<string, HeadInfo> classField, ConfigType configType, StringBuilder sb)
+        // {
+        //     string configTypeStr = configType.ToString();
+        //     for (int row = 6; row <= worksheet.Dimension.End.Row; ++row)
+        //     {
+        //         string prefix = worksheet.Cells[row, 2].Text.Trim();
+        //         if (prefix.Contains("#"))
+        //         {
+        //             continue;
+        //         }
+        //
+        //         if (prefix == "")
+        //         {
+        //             prefix = "cs";
+        //         }
+        //
+        //         if (configType != ConfigType.cs && !prefix.Contains(configTypeStr))
+        //         {
+        //             continue;
+        //         }
+        //
+        //         if (worksheet.Cells[row, 3].Text.Trim() == "")
+        //         {
+        //             continue;
+        //         }
+        //
+        //         //sb.Append($"[{worksheet.Cells[row, 3].Text.Trim()}, {{\"_t\":\"{name}\"");
+        //         sb.Append($"{{\"_t\":\"{name}\"");
+        //         for (int col = 3; col <= worksheet.Dimension.End.Column; ++col)
+        //         {
+        //             string fieldName = worksheet.Cells[4, col].Text.Trim();
+        //             if (!classField.ContainsKey(fieldName))
+        //             {
+        //                 continue;
+        //             }
+        //
+        //             HeadInfo headInfo = classField[fieldName];
+        //
+        //             if (headInfo == null)
+        //             {
+        //                 continue;
+        //             }
+        //
+        //             if (configType != ConfigType.cs && !headInfo.FieldCS.Contains(configTypeStr))
+        //             {
+        //                 continue;
+        //             }
+        //
+        //             string fieldN = headInfo.FieldName;
+        //             if (fieldN == "Id")
+        //             {
+        //                 fieldN = "_id";
+        //             }
+        //
+        //             sb.Append($",\"{fieldN}\":{Convert(headInfo.FieldType, worksheet.Cells[row, col].Text.Trim())}");
+        //         }
+        //
+        //         //sb.Append("}],\n");
+        //         sb.Append("},\n");
+        //     }
+        // }
+
         private static string Convert(string type, string value)
         {
+            // 字典解析
+            if (type.StartsWith("Dictionary<"))
+            {
+                return ConvertDictionary(type, value);
+            }
+
             switch (type)
             {
                 case "uint[]":
@@ -583,8 +756,86 @@ namespace ET
             }
         }
 
-        #endregion
+        private static string ConvertDictionary(string type, string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return "{}";
 
+            // 解析 Dictionary<TKey, TValue>
+            int start = type.IndexOf("<") + 1;
+            int end = type.LastIndexOf(">");
+            string inner = type.Substring(start, end - start);
+
+            string[] parts = inner.Split(',');
+            if (parts.Length != 2)
+                throw new Exception($"字典类型格式错误: {type}");
+
+            string keyType = parts[0].Trim();
+            string valueType = parts[1].Trim();
+
+            string[] pairs = value.Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{");
+
+            for (int i = 0; i < pairs.Length; ++i)
+            {
+                string[] kv = pairs[i].Split(':', 2);
+                if (kv.Length != 2)
+                    throw new Exception($"字典项格式错误: '{pairs[i]}'");
+
+                string k = ConvertSingleValue(keyType, kv[0].Trim());
+                string v = ConvertSingleValue(valueType, kv[1].Trim());
+
+                //sb.Append($"{k}:{v}");
+                string rawKey = kv[0].Trim();
+                string jsonKey = rawKey.Replace("\\", "\\\\").Replace("\"", "\\\"");
+                sb.Append($"\"{jsonKey}\":{v}");
+
+                if (i < pairs.Length - 1)
+                    sb.Append(",");
+            }
+
+            sb.Append("}");
+            return sb.ToString();
+        }
+
+        private static string ConvertSingleValue(string type, string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                if (type == "string")
+                    return "\"\"";
+                return "0";
+            }
+
+            switch (type)
+            {
+                case "int":
+                case "uint":
+                case "short":
+                case "ushort":
+                case "long":
+                case "ulong":
+                case "float":
+                case "double":
+                case "bool":
+                    return value;
+
+                case "string":
+                    value = value.Replace("\\", "\\\\").Replace("\"", "\\\"");
+                    return $"\"{value}\"";
+
+                default:
+                    // 支持自定义对象：{a:1,b:2}
+                    if (value.StartsWith("{") && value.EndsWith("}"))
+                        return value;
+
+                    throw new Exception($"不支持的类型 '{type}'，值：'{value}'");
+            }
+        }
+
+        #endregion
 
         // 根据生成的类，把json转成protobuf
         private static void ExportExcelProtobuf(ConfigType configType, string protoName, string relativeDir)
@@ -612,7 +863,11 @@ namespace ET
                 string json = File.ReadAllText(jsonPath);
                 try
                 {
-                    object deserialize = BsonSerializer.Deserialize(json, type);
+                    // 用 BsonDocument 反序列化更稳定
+                    var doc = MongoDB.Bson.BsonDocument.Parse(json);
+                    object deserialize = BsonSerializer.Deserialize(doc, type);
+
+                    // Merge 会把 s.list 合并到 final.list
                     final.Merge(deserialize);
                 }
                 catch (Exception e)
@@ -627,4 +882,5 @@ namespace ET
             file.Write(final.ToBson());
         }
     }
+
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="116,115" extention="Button">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="3"/>
+  <controller name="ArC" exported="true" pages="0,Next,1,Pre" selected="0"/>
+  <displayList>
+    <image id="n0_h3lu" name="n0" src="zijbl" fileName="res/ArPre.png" xy="0,0">
+      <gearDisplay controller="ArC" pages="1"/>
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n2_h3lu" name="n2" src="h3luo" fileName="res/ArNext.png" xy="0,0">
+      <gearDisplay controller="ArC" pages="0"/>
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+  </displayList>
+  <Button/>
+</component>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="800,675">
+  <displayList>
+    <image id="n1_h3lu" name="n1" src="h3lun" fileName="res/InfoBG.png" pkg="5razy0t5" xy="2,-2" size="800,673">
+      <relation target="" sidePair="width-width,height-height,center-center,middle-middle"/>
+    </image>
+    <text id="n2_bxuq" name="n2" xy="76,66" size="153,42" fontSize="30" color="#ffffff" autoSize="none" text="角色名称：">
+      <relation target="" sidePair="center-center"/>
+    </text>
+    <text id="n3_bxuq" name="n3" xy="76,321" size="152,42" fontSize="30" color="#ffffff" autoSize="none" text="属性：">
+      <relation target="n7_bxuq" sidePair="top-bottom"/>
+      <relation target="" sidePair="center-center"/>
+    </text>
+    <text id="n4_bxuq" name="n4" xy="76,138" size="151,42" fontSize="30" color="#ffffff" autoSize="none" text="角色简介：">
+      <relation target="" sidePair="center-center"/>
+    </text>
+    <text id="n6_bxuq" name="Txt_RoleName" xy="230,66" size="493,41" fontSize="30" color="#ffffff" autoSize="height" text="孙悟空">
+      <relation target="" sidePair="center-center"/>
+    </text>
+    <text id="n7_bxuq" name="Txt_RoleDIcx" xy="228,138" size="495,157" fontSize="30" color="#ffffff" autoSize="height" text="孙悟空3124抢沙发的情况和狗会饿我还这仨起来的啊说不定客户 嗯；lsqa12312412312412312214123123412451">
+      <relation target="" sidePair="center-center"/>
+    </text>
+    <list id="n8_bxuq" name="RoleAttributeList" xy="229,321" size="492,176" layout="flow_hz" overflow="scroll" lineItemCount="2" defaultItem="ui://9q0q76hcbxuqv">
+      <relation target="n7_bxuq" sidePair="top-bottom"/>
+      <relation target="" sidePair="center-center"/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+    </list>
+  </displayList>
+</component>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="577,769">
+  <displayList>
+    <loader id="n1_bxuq" name="Img_Role" xy="154,106" size="271,591" group="n4_bxuq" url="ui://v5ye6f0blh2m0">
+      <relation target="n0_bxuq" sidePair="width-width,center-center,middle-middle"/>
+    </loader>
+    <image id="n0_bxuq" name="n0" src="bxuqt" fileName="res/RoleSelectBg.png" xy="48,0" size="482,768" group="n4_bxuq">
+      <relation target="" sidePair="width-width,center-center,middle-middle"/>
+    </image>
+    <group id="n4_bxuq" name="n4" xy="48,0" size="482,768"/>
+  </displayList>
+</component>

@@ -52,7 +52,14 @@ namespace ET
 
         public override void EndInit()
         {
-            foreach (StartSceneConfig startSceneConfig in this.GetAll().Values)
+            if (this.dict.Count == 0)
+            {
+                foreach (var item in this.list)
+                {
+                    this.dict[item.Id] = item;
+                }
+            }
+            foreach (StartSceneConfig startSceneConfig in this.dict.Values)
             {
                 this.ProcessScenes.Add(startSceneConfig.Process, startSceneConfig);
                 

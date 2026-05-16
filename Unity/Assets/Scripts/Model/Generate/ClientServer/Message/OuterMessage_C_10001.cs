@@ -1491,6 +1491,9 @@ namespace ET
         [MemoryPackOrder(6)]
         public int ServerId { get; set; }
 
+        [MemoryPackOrder(7)]
+        public int HeroId { get; set; }
+
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -1505,6 +1508,32 @@ namespace ET
             this.LastLoginTime = default;
             this.CreateTime = default;
             this.ServerId = default;
+            this.HeroId = default;
+
+            ObjectPool.Instance.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(OuterMessage.NumericProto)]
+    public partial class NumericProto : MessageObject
+    {
+        public static NumericProto Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(NumericProto), isFromPool) as NumericProto;
+        }
+
+        [MongoDB.Bson.Serialization.Attributes.BsonDictionaryOptions(MongoDB.Bson.Serialization.Options.DictionaryRepresentation.ArrayOfArrays)]
+        [MemoryPackOrder(0)]
+        public Dictionary<int, long> KV { get; set; } = new();
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.KV.Clear();
 
             ObjectPool.Instance.Recycle(this);
         }
@@ -1610,6 +1639,9 @@ namespace ET
         [MemoryPackOrder(4)]
         public int ServerId { get; set; }
 
+        [MemoryPackOrder(5)]
+        public int HeroId { get; set; }
+
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -1622,6 +1654,7 @@ namespace ET
             this.Account = default;
             this.Name = default;
             this.ServerId = default;
+            this.HeroId = default;
 
             ObjectPool.Instance.Recycle(this);
         }
@@ -2011,17 +2044,18 @@ namespace ET
         public const ushort C2R_GetServerInfos = 10044;
         public const ushort R2C_GetServerInfos = 10045;
         public const ushort RoleInfoProto = 10046;
-        public const ushort C2R_GetRoles = 10047;
-        public const ushort R2C_GetRoles = 10048;
-        public const ushort C2R_CreateRole = 10049;
-        public const ushort R2C_CreatRole = 10050;
-        public const ushort C2R_DeleteRole = 10051;
-        public const ushort R2C_DeleteRole = 10052;
-        public const ushort C2R_GetRealmKey = 10053;
-        public const ushort R2C_GetRealmKey = 10054;
-        public const ushort C2G_LoginGameGate = 10055;
-        public const ushort G2C_LoginGameGate = 10056;
-        public const ushort C2G_EnterGame = 10057;
-        public const ushort G2C_EnterGame = 10058;
+        public const ushort NumericProto = 10047;
+        public const ushort C2R_GetRoles = 10048;
+        public const ushort R2C_GetRoles = 10049;
+        public const ushort C2R_CreateRole = 10050;
+        public const ushort R2C_CreatRole = 10051;
+        public const ushort C2R_DeleteRole = 10052;
+        public const ushort R2C_DeleteRole = 10053;
+        public const ushort C2R_GetRealmKey = 10054;
+        public const ushort R2C_GetRealmKey = 10055;
+        public const ushort C2G_LoginGameGate = 10056;
+        public const ushort G2C_LoginGameGate = 10057;
+        public const ushort C2G_EnterGame = 10058;
+        public const ushort G2C_EnterGame = 10059;
     }
 }
